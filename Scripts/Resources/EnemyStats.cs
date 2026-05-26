@@ -11,6 +11,5 @@ public partial class EnemyStats : Resource
     [Export] public int ContactDamage { get; set; } = 1; // The amount of damage the enemy deals to the player on contact. Hihher values mean more damage to the player.
     [Export] public int ScoreValue { get; set; } = 10; // The amount of points the player gets for defeating this enemy.
 
-    [Export] public Color BodyColor { get; set; } = Colors.Red; // The color of the enemy's body. Used for visual differentiation between enemy types.
-    [Export] public Color GlowColor { get; set; } = Colors.OrangeRed; // The color of the enemy's glow. Used for visual differentiation between enemy types.
+    [Export] public Color BodyColor { get; set; } = Colors.Red; // The color of the enemy's body and glow.
 }

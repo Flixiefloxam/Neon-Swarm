@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://dopdv3r8sqkey"]
 
 [ext_resource type="Script" uid="uid://c1xbk1qvo2ika" path="res://Scripts/Player/PlayerController.cs" id="1_ft8w5"]
-[ext_resource type="Texture2D" uid="uid://dkstvvrbyc3vp" path="res://Art/Sprites/Player.png" id="1_s0eop"]
+[ext_resource type="Texture2D" uid="uid://cjkv5tcqphndc" path="res://Art/Sprites/Square.png" id="2_ft8w5"]
+[ext_resource type="Script" uid="uid://ba0gw38a5ulg2" path="res://Scripts/Visuals/GlowVisual.cs" id="2_h54ih"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
 
@@ -13,10 +14,15 @@ script = ExtResource("1_ft8w5")
 shape = SubResource("RectangleShape2D_ft8w5")
 
 [node name="Visuals" type="Node2D" parent="." unique_id=326099303]
+script = ExtResource("2_h54ih")
+BodyColor = Color(0, 0.8980392, 1, 1)
+GlowIntensity = 1.4
 
 [node name="Body" type="Sprite2D" parent="Visuals" unique_id=1624311563]
+self_modulate = Color(0, 0.8980392, 1, 1)
+z_index = 2
 texture_filter = 1
-texture = ExtResource("1_s0eop")
+texture = ExtResource("2_ft8w5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1885920402]
 texture_filter = 1

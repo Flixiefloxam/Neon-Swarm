@@ -1,5 +1,6 @@
 using Godot;
 using NeonSwarm.Resources;
+using NeonSwarm.Visuals;
 
 namespace NeonSwarm.Enemies;
 
@@ -9,6 +10,8 @@ public partial class BaseEnemy : CharacterBody2D
 
 	protected float CurrentHealth;
 	protected Node2D Target;
+
+	private GlowVisual _glowVisual;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -23,6 +26,17 @@ public partial class BaseEnemy : CharacterBody2D
 		}
 		CurrentHealth = Stats.MaxHealth;
 		Target = GetTree().GetFirstNodeInGroup("Player") as Node2D;
+
+		_glowVisual = GetNodeOrNull<GlowVisual>("Visuals");
+		if (_glowVisual != null)
+		{
+			_glowVisual.ApplyColor(Stats.BodyColor);
+		}
+		else
+		{
+			GD.PushWarning($"{Name} has no GlowVisual child.");
+		}
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

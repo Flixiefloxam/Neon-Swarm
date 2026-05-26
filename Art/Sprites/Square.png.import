@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhwlsmbst3irs"
-path="res://.godot/imported/Chaser.png-aa74fb95b235966577c454c9fed2b58f.ctex"
+uid="uid://cjkv5tcqphndc"
+path="res://.godot/imported/Square.png-68e2d7dff1d149a83224e133c33ba509.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Sprites/Chaser.png"
-dest_files=["res://.godot/imported/Chaser.png-aa74fb95b235966577c454c9fed2b58f.ctex"]
+source_file="res://Art/Sprites/Square.png"
+dest_files=["res://.godot/imported/Square.png-68e2d7dff1d149a83224e133c33ba509.ctex"]
 
 [params]
 
