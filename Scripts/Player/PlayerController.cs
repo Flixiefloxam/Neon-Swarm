@@ -1,9 +1,18 @@
 using Godot;
 
+namespace NeonSwarm.Player;
+
 public partial class PlayerController : CharacterBody2D
 {
 	[Export] public float MoveSpeed = 300.0f;
 
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		AddToGroup("Player");
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
 		// Get the input direction as vector

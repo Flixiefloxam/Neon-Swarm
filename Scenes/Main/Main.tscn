@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://v55sje8w80nu"]
 
 [ext_resource type="PackedScene" uid="uid://dopdv3r8sqkey" path="res://Scenes/Player/Player.tscn" id="1_p8rbg"]
+[ext_resource type="PackedScene" uid="uid://b15n0s6304222" path="res://Scenes/Enemies/Chaser.tscn" id="2_qtv3y"]
 
 [node name="Main" type="Node2D" unique_id=975442978]
 
 [node name="Player" parent="." unique_id=168775628 instance=ExtResource("1_p8rbg")]
+
+[node name="Chaser" parent="." unique_id=1393047655 instance=ExtResource("2_qtv3y")]
+position = Vector2(234, 47)

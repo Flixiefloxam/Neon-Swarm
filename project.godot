@@ -19,6 +19,12 @@ config/icon="res://icon.svg"
 
 project/assembly_name="NeonSwarm"
 
+[global_group]
+
+Enemies="The enemies. Things that the player will autoshoot."
+Player="The Player Character"
+Projectiles="Projectiles fired by either the player or enemies"
+
 [input]
 
 move_left={

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://b15n0s6304222"]
+
+[ext_resource type="Texture2D" uid="uid://bhwlsmbst3irs" path="res://Art/Sprites/Chaser.png" id="1_4waul"]
+[ext_resource type="Script" uid="uid://be0laqjj8lbee" path="res://Scripts/Enemies/ChaserEnemy.cs" id="1_eub6r"]
+[ext_resource type="Resource" uid="uid://c55ptsrg4d4pl" path="res://Resources/Enemies/ChaserStats.tres" id="2_bjp27"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4waul"]
+size = Vector2(22, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eub6r"]
+size = Vector2(24, 24)
+
+[node name="Chaser" type="CharacterBody2D" unique_id=1393047655]
+script = ExtResource("1_eub6r")
+Stats = ExtResource("2_bjp27")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1631610274]
+shape = SubResource("RectangleShape2D_4waul")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=923753387]
+
+[node name="Body" type="Sprite2D" parent="Visuals" unique_id=1582645759]
+texture_filter = 1
+texture = ExtResource("1_4waul")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=126500847]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2126759615]
+shape = SubResource("RectangleShape2D_eub6r")
