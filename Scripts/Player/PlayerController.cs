@@ -10,6 +10,7 @@ public partial class PlayerController : CharacterBody2D
 	public override void _Ready()
 	{
 		AddToGroup("Player");
+		MotionMode = MotionModeEnum.Floating;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

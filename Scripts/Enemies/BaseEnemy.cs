@@ -14,6 +14,7 @@ public partial class BaseEnemy : CharacterBody2D
 	public override void _Ready()
 	{
 		AddToGroup("Enemies");
+		MotionMode = MotionModeEnum.Floating;
 
 		if (Stats == null)
 		{

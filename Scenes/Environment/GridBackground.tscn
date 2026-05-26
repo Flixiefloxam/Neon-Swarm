@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cc4kkhj3k6cfb"]
+
+[ext_resource type="Texture2D" uid="uid://cojibb8i8djx3" path="res://Art/Sprites/BackgroundGridTile.png" id="1_fe235"]
+[ext_resource type="Script" uid="uid://dxbqgjmf4x7xr" path="res://Scripts/Environment/GridBackground.cs" id="1_y3iv4"]
+
+[node name="GridBackground" type="Node2D" unique_id=229738081]
+script = ExtResource("1_y3iv4")
+
+[node name="Grid" type="Sprite2D" parent="." unique_id=862787409]
+z_index = -100
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("1_fe235")
+region_enabled = true
+region_rect = Rect2(0, 0, 4096, 4096)
