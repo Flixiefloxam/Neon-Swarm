@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dopdv3r8sqkey"]
+
+[ext_resource type="Script" uid="uid://c1xbk1qvo2ika" path="res://Scripts/Player/PlayerController.cs" id="1_ft8w5"]
+[ext_resource type="Texture2D" uid="uid://dkstvvrbyc3vp" path="res://Art/Sprites/Player.png" id="1_s0eop"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
+
+[node name="Player" type="CharacterBody2D" unique_id=168775628]
+script = ExtResource("1_ft8w5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1636370039]
+shape = SubResource("RectangleShape2D_ft8w5")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=326099303]
+
+[node name="Body" type="Sprite2D" parent="Visuals" unique_id=1624311563]
+texture_filter = 1
+texture = ExtResource("1_s0eop")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1885920402]
+texture_filter = 1
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
