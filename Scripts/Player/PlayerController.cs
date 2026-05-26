@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class PlayerController : CharacterBody2D
 {
@@ -7,8 +6,6 @@ public partial class PlayerController : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		Vector2 velocity = Velocity;
-
 		// Get the input direction as vector
 		Vector2 direction = Input.GetVector("move_left", "move_right", "move_up", "move_down");
 		
