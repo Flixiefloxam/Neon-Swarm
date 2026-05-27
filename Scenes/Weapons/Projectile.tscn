@@ -14,6 +14,6 @@ shape = SubResource("CircleShape2D_m6xnb")
 
 [node name="Visuals" type="Node2D" parent="." unique_id=164100790]
 
-[node name="Body" type="Sprite2D" parent="Visuals" unique_id=1496865836]
-self_modulate = Color(1.5720325, 1.4934099, 0.7676636, 1)
+[node name="Body" type="Sprite2D" parent="Visuals" unique_id=1496865836 groups=["Projectiles"]]
+self_modulate = Color(1.5720325, 1.4934099, 0.36245528, 1)
 texture = ExtResource("1_g6ral")

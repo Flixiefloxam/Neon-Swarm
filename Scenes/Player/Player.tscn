@@ -8,7 +8,7 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
 
-[node name="Player" type="CharacterBody2D" unique_id=168775628]
+[node name="Player" type="CharacterBody2D" unique_id=168775628 groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_ft8w5")
 

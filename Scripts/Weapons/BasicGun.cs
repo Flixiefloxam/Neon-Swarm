@@ -5,14 +5,26 @@ namespace NeonSwarm.Weapons;
 public partial class BasicGun : Node2D
 {
 	[Export] public PackedScene ProjectileScene { get; set; }
+	[Export] public NodePath ProjectileContainerPath { get; set; }
 	[Export] public float FireRate { get; set; } = 1f; // Number of shots per second. Higher values mean faster firing.
 
 	private const int MaxShotsPerFrame = 5; // Maximum number of shots that can be fired in a single frame to prevent performance issues during frame rate drops.
+
 	private float _timeSinceLastShot = 0f;
+	private Node2D _projectileContainer;
+
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		_projectileContainer = GetOrCreateProjectileContainer();
+
+		if (_projectileContainer == null)
+			GD.PushError($"{Name} could not create or find a projectile container.");
+	}
 
     public override void _PhysicsProcess(double delta)
     {
-		if (FireRate <= 0f)
+		if (FireRate <= 0f || ProjectileScene == null || _projectileContainer == null)
 			return;
 		
 		int shotsThisFrame = 0;
@@ -59,10 +71,16 @@ public partial class BasicGun : Node2D
 			return false;
 		}
 
+		if (_projectileContainer == null)
+		{
+			GD.PushWarning($"{Name} has no projectile container.");
+			return false;
+		}
+
 		Vector2 direction = (target.GlobalPosition - GlobalPosition).Normalized();
 
 		Projectile projectile = ProjectileScene.Instantiate<Projectile>();
-		GetTree().CurrentScene.AddChild(projectile);
+		_projectileContainer.AddChild(projectile);
 		projectile.GlobalPosition = GlobalPosition;
 		projectile.SetDirection(direction);
 		return true;
@@ -90,5 +108,41 @@ public partial class BasicGun : Node2D
 		}
 
 		return nearestEnemy;
+	}
+
+	// Retrieves the projectile container node based on the specified ProjectileContainerPath, falling back to an existing node or creating one if needed.
+	private Node2D GetOrCreateProjectileContainer()
+	{
+		Node2D container = GetNodeOrNull<Node2D>(ProjectileContainerPath);
+
+		if (container != null)
+			return container;
+
+		Node parent = GetTree().CurrentScene ?? GetParent();
+
+		if (parent == null)
+		{
+			GD.PushWarning($"{Name} could not find a valid parent for ProjectileContainer.");
+			return null;
+		}
+
+		container = parent.GetNodeOrNull<Node2D>("ProjectileContainer");
+
+		if (container != null)
+		{
+			GD.PushWarning($"{Name} wasn't given a ProjectileContainerPath, but found a node named 'ProjectileContainer'. Using that node as the projectile container. Please assign ProjectileContainerPath to avoid this warning.");
+			return container;
+		}
+
+		container = new Node2D
+		{
+			Name = "ProjectileContainer"
+		};
+
+		parent.AddChild(container);
+
+		GD.PushWarning($"{Name} has no ProjectileContainerPath assigned and couldn't find a ProjectileContainer. Created a temporary ProjectileContainer node. Please assign ProjectileContainerPath to avoid this warning.");
+
+		return container;
 	}
 }

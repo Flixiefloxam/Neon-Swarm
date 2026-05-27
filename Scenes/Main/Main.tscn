@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cc4kkhj3k6cfb" path="res://Scenes/Environment/GridBackground.tscn" id="1_cmk6n"]
 [ext_resource type="PackedScene" uid="uid://dopdv3r8sqkey" path="res://Scenes/Player/Player.tscn" id="1_p8rbg"]
+[ext_resource type="PackedScene" uid="uid://eqrbk80ea8vy" path="res://Scenes/Spawners/EnemySpawner.tscn" id="2_cmk6n"]
 [ext_resource type="PackedScene" uid="uid://b15n0s6304222" path="res://Scenes/Enemies/Chaser.tscn" id="2_qtv3y"]
 
 [sub_resource type="Environment" id="Environment_cmk6n"]
@@ -18,7 +19,12 @@ environment = SubResource("Environment_cmk6n")
 
 [node name="GridBackground" parent="." unique_id=229738081 instance=ExtResource("1_cmk6n")]
 
-[node name="Player" parent="." unique_id=168775628 instance=ExtResource("1_p8rbg")]
+[node name="EnemyContainer" type="Node2D" parent="." unique_id=238785141]
 
-[node name="Chaser" parent="." unique_id=1393047655 instance=ExtResource("2_qtv3y")]
-position = Vector2(234, 47)
+[node name="ProjectileContainer" type="Node2D" parent="." unique_id=182134154]
+
+[node name="EnemySpawner" parent="." unique_id=851304664 instance=ExtResource("2_cmk6n")]
+EnemyScene = ExtResource("2_qtv3y")
+EnemyContainerPath = NodePath("../EnemyContainer")
+
+[node name="Player" parent="." unique_id=168775628 instance=ExtResource("1_p8rbg")]
