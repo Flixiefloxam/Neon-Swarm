@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c1xbk1qvo2ika" path="res://Scripts/Player/PlayerController.cs" id="1_ft8w5"]
 [ext_resource type="Texture2D" uid="uid://cjkv5tcqphndc" path="res://Art/Sprites/Square.png" id="2_ft8w5"]
 [ext_resource type="Script" uid="uid://ba0gw38a5ulg2" path="res://Scripts/Visuals/GlowVisual.cs" id="2_h54ih"]
+[ext_resource type="Script" uid="uid://doycjeqhsbhcc" path="res://Scripts/Weapons/BasicGun.cs" id="4_jmcll"]
+[ext_resource type="PackedScene" uid="uid://bpht8jkcbeev6" path="res://Scenes/Weapons/Projectile.tscn" id="5_4wape"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
 
@@ -28,3 +30,7 @@ texture = ExtResource("2_ft8w5")
 texture_filter = 1
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+
+[node name="BasicGun" type="Node2D" parent="." unique_id=1105378805]
+script = ExtResource("4_jmcll")
+ProjectileScene = ExtResource("5_4wape")

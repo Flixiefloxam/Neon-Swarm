@@ -56,7 +56,7 @@ public partial class BaseEnemy : CharacterBody2D
 		MoveAndSlide();
 	}
 
-	public void TakeDamage(int damage)
+	public virtual void TakeDamage(float damage)
 	{
 		CurrentHealth -= damage;
 		if (CurrentHealth <= 0)
