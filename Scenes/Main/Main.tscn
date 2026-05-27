@@ -25,6 +25,5 @@ environment = SubResource("Environment_cmk6n")
 
 [node name="EnemySpawner" parent="." unique_id=851304664 instance=ExtResource("2_cmk6n")]
 EnemyScene = ExtResource("2_qtv3y")
-EnemyContainerPath = NodePath("../EnemyContainer")
 
 [node name="Player" parent="." unique_id=168775628 instance=ExtResource("1_p8rbg")]

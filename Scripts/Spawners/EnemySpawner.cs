@@ -8,7 +8,6 @@ public partial class EnemySpawner : Node
 	[Export] public float SpawnRate { get; set; } = 0.5f; // Enemies spawned per second.
 	[Export] public int MaxAliveEnemies { get; set; } = 50;
 	[Export] public float SpawnDistanceFromPlayer { get; set; } = 700f;
-	[Export] public NodePath EnemyContainerPath { get; set; }
 
 	private Node2D _player;
 	private Node2D _enemyContainer;
@@ -79,11 +78,6 @@ public partial class EnemySpawner : Node
 	// Retrieves the enemy container node based on the specified EnemyContainerPath, falling back to an existing node or creating one if needed.
 	private Node2D GetOrCreateEnemyContainer()
 	{
-		Node2D container = GetNodeOrNull<Node2D>(EnemyContainerPath);
-
-		if (container != null)
-			return container;
-
 		Node parent = GetTree().CurrentScene ?? GetParent();
 
 		if (parent == null)
@@ -92,13 +86,10 @@ public partial class EnemySpawner : Node
 			return null;
 		}
 
-		container = parent.GetNodeOrNull<Node2D>("EnemyContainer");
+		Node2D container = parent.GetNodeOrNull<Node2D>("EnemyContainer");
 
 		if (container != null)
-		{
-			GD.PushWarning($"{Name} wasn't given an EnemyContainerPath, but found a node named 'EnemyContainer'. Using that node as the enemy container. Please assign EnemyContainerPath to avoid this warning.");
         	return container;
-		}
 
 		container = new Node2D
 		{
@@ -106,7 +97,7 @@ public partial class EnemySpawner : Node
 		};
 
 		parent.AddChild(container);
-		GD.PushWarning($"{Name} has no EnemyContainerPath assigned and couldn't find an EnemyContainer. Created a temporary EnemyContainer node. Please assign EnemyContainerPath to avoid this warning.");
+		GD.PushWarning($"{Name} couldn't find an EnemyContainer. Created a temporary EnemyContainer node. Please create a proper EnemyContainer node to avoid this warning.");
 		return container;
 	}
 }
