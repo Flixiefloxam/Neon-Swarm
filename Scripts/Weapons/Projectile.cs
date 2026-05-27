@@ -1,5 +1,5 @@
 using Godot;
-using NeonSwarm.Enemies;
+using NeonSwarm.Components;
 
 namespace NeonSwarm.Weapons;
 
@@ -8,6 +8,7 @@ public partial class Projectile : Area2D
 	[Export] public float Speed = 400f;
 	[Export] public float Damage = 1f;
 	[Export] public float Lifetime = 2f;
+	[Export] public DamageFaction TargetFaction { get; set; } = DamageFaction.Enemy; // The faction that this projectile will damage.
 
 	private Vector2 _direction = Vector2.Right;
 	private float _lifeRemaining = 0f;
@@ -40,15 +41,16 @@ public partial class Projectile : Area2D
 		Rotation = _direction.Angle();
 	}
 
-	// Called when the projectile enters an area. If the area belongs to an enemy, the enemy takes damage and the projectile is destroyed.
+	// Damages compatible hurtboxes and destroys the projectile on hit.
 	private void OnAreaEntered(Area2D area)
 	{
-		BaseEnemy enemy = area.GetParentOrNull<BaseEnemy>();
+		if (area is not HurtboxComponent hurtbox)
+			return;
 
-		if (enemy == null)
+		if (hurtbox.Faction != TargetFaction)
 			return;
 		
-		enemy.TakeDamage(Damage);
+		hurtbox.TakeDamage(Damage);
 		QueueFree();
 	}
 }

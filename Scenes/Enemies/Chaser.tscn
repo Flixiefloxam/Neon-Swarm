@@ -3,7 +3,9 @@
 [ext_resource type="Script" uid="uid://be0laqjj8lbee" path="res://Scripts/Enemies/ChaserEnemy.cs" id="1_eub6r"]
 [ext_resource type="Resource" uid="uid://c55ptsrg4d4pl" path="res://Resources/Enemies/ChaserStats.tres" id="2_bjp27"]
 [ext_resource type="Texture2D" uid="uid://cjkv5tcqphndc" path="res://Art/Sprites/Square.png" id="3_bjp27"]
+[ext_resource type="Script" uid="uid://bfg0yb61kmhq1" path="res://Scripts/Components/HealthComponent.cs" id="3_d13j5"]
 [ext_resource type="Script" uid="uid://ba0gw38a5ulg2" path="res://Scripts/Visuals/GlowVisual.cs" id="3_jgp3i"]
+[ext_resource type="Script" uid="uid://bveur66pagmmk" path="res://Scripts/Components/HurtboxComponent.cs" id="6_3o16g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4waul"]
 size = Vector2(22, 22)
@@ -19,6 +21,9 @@ Stats = ExtResource("2_bjp27")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1631610274]
 shape = SubResource("RectangleShape2D_4waul")
 
+[node name="HealthComponent" type="Node" parent="." unique_id=199467647]
+script = ExtResource("3_d13j5")
+
 [node name="Visuals" type="Node2D" parent="." unique_id=923753387]
 script = ExtResource("3_jgp3i")
 GlowIntensity = 1.3
@@ -30,6 +35,8 @@ texture_filter = 1
 texture = ExtResource("3_bjp27")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=126500847]
+script = ExtResource("6_3o16g")
+Faction = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2126759615]
 shape = SubResource("RectangleShape2D_eub6r")

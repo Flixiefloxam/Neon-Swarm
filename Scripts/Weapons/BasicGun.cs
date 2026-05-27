@@ -6,6 +6,7 @@ public partial class BasicGun : Node2D
 {
 	[Export] public PackedScene ProjectileScene { get; set; }
 	[Export] public float FireRate { get; set; } = 1f; // Number of shots per second. Higher values mean faster firing.
+	[Export] public float ProjectileSpawnOffset = 16f; // Distance from the gun's position where the projectile will spawn. 
 
 	private const int MaxShotsPerFrame = 5; // Maximum number of shots that can be fired in a single frame to prevent performance issues during frame rate drops.
 
@@ -79,9 +80,12 @@ public partial class BasicGun : Node2D
 		Vector2 direction = (target.GlobalPosition - GlobalPosition).Normalized();
 
 		Projectile projectile = ProjectileScene.Instantiate<Projectile>();
-		_projectileContainer.AddChild(projectile);
-		projectile.GlobalPosition = GlobalPosition;
+		
+		Vector2 spawnPosition = GlobalPosition + direction * ProjectileSpawnOffset;
+		projectile.Position = _projectileContainer.ToLocal(spawnPosition);
 		projectile.SetDirection(direction);
+
+		_projectileContainer.AddChild(projectile);
 		return true;
 	}
 
@@ -109,7 +113,7 @@ public partial class BasicGun : Node2D
 		return nearestEnemy;
 	}
 
-	// Retrieves the projectile container node based on the specified ProjectileContainerPath, falling back to an existing node or creating one if needed.
+	// Retrieves the projectile container from the current scene, creating one if needed.
 	private Node2D GetOrCreateProjectileContainer()
 	{
 		Node parent = GetTree().CurrentScene ?? GetParent();

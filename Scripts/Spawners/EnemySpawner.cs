@@ -59,8 +59,10 @@ public partial class EnemySpawner : Node
 	{
 		Node2D enemyInstance = EnemyScene.Instantiate<Node2D>();
 
+		Vector2 spawnPosition = GetSpawnPosition();
+		enemyInstance.Position = _enemyContainer.ToLocal(spawnPosition);
+
 		_enemyContainer.AddChild(enemyInstance);
-		enemyInstance.GlobalPosition = GetSpawnPosition();
 	}
 
 	// Calculates a random spawn position around the player at a specified distance. The spawn position is determined by generating a random angle and placing the enemy at that angle from the player.
@@ -75,7 +77,7 @@ public partial class EnemySpawner : Node
 		return _player.GlobalPosition + direction * SpawnDistanceFromPlayer;
 	}
 
-	// Retrieves the enemy container node based on the specified EnemyContainerPath, falling back to an existing node or creating one if needed.
+	// Retrieves the enemy container from the current scene, creating one if needed.
 	private Node2D GetOrCreateEnemyContainer()
 	{
 		Node parent = GetTree().CurrentScene ?? GetParent();
