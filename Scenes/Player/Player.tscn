@@ -11,15 +11,25 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fk5o5"]
+size = Vector2(28, 28)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t26db"]
 
 [node name="Player" type="CharacterBody2D" unique_id=168775628 groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_ft8w5")
-EnemyPushStrength = 100.0
+EnemyPushStrength = 300.0
+BodyRadius = 25.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1636370039]
 shape = SubResource("RectangleShape2D_ft8w5")
+disabled = true
+
+[node name="EnemyPushArea" type="Area2D" parent="." unique_id=1784979155]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyPushArea" unique_id=281621306]
+shape = SubResource("RectangleShape2D_fk5o5")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=680411109]
 script = ExtResource("2_4wape")
@@ -37,10 +47,16 @@ script = ExtResource("2_h54ih")
 BodyColor = Color(0, 0.8980392, 1, 1)
 GlowIntensity = 1.4
 
+[node name="Border" type="Sprite2D" parent="Visuals" unique_id=1688479711]
+self_modulate = Color(0.15294118, 0.15294118, 0.15294118, 1)
+z_index = 2
+texture = ExtResource("2_ft8w5")
+
 [node name="Body" type="Sprite2D" parent="Visuals" unique_id=1624311563]
 self_modulate = Color(0, 0.8980392, 1, 1)
 z_index = 2
 texture_filter = 1
+scale = Vector2(0.85, 0.85)
 texture = ExtResource("2_ft8w5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1885920402]
