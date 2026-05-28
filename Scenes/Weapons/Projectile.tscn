@@ -2,14 +2,20 @@
 
 [ext_resource type="Texture2D" uid="uid://7bblql7uwacx" path="res://Art/Sprites/Circle.png" id="1_g6ral"]
 [ext_resource type="Script" uid="uid://cuxiaixmbj0be" path="res://Scripts/Weapons/Projectile.cs" id="1_ytq58"]
+[ext_resource type="Script" uid="uid://dsn58dbdddxxv" path="res://Scripts/Components/HitboxComponent.cs" id="2_0bwby"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_m6xnb"]
 radius = 5.0
 
-[node name="Projectile" type="Area2D" unique_id=297999684 groups=["Projectiles"]]
+[node name="Projectile" type="Node2D" unique_id=1312199632 groups=["Projectiles"]]
 script = ExtResource("1_ytq58")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1194112722]
+[node name="Hitbox" type="Area2D" parent="." unique_id=876903752]
+script = ExtResource("2_0bwby")
+TargetFactions = 2
+HitsUntilDestroyed = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1194112722]
 shape = SubResource("CircleShape2D_m6xnb")
 
 [node name="Visuals" type="Node2D" parent="." unique_id=164100790]

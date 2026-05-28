@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bveur66pagmmk" path="res://Scripts/Components/HurtboxComponent.cs" id="3_t26db"]
 [ext_resource type="Script" uid="uid://doycjeqhsbhcc" path="res://Scripts/Weapons/BasicGun.cs" id="4_jmcll"]
 [ext_resource type="PackedScene" uid="uid://bpht8jkcbeev6" path="res://Scenes/Weapons/Projectile.tscn" id="5_4wape"]
+[ext_resource type="Script" uid="uid://c3gvqaioynmsf" path="res://Scripts/Debugging/HealthDebugLogger.cs" id="8_fk5o5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
 
@@ -15,6 +16,7 @@
 [node name="Player" type="CharacterBody2D" unique_id=168775628 groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_ft8w5")
+EnemyPushStrength = 100.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1636370039]
 shape = SubResource("RectangleShape2D_ft8w5")
@@ -25,7 +27,7 @@ MaxHealth = 10.0
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=992953310]
 script = ExtResource("3_t26db")
-Faction = 0
+Faction = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=587090801]
 shape = SubResource("RectangleShape2D_t26db")
@@ -49,3 +51,7 @@ drag_vertical_enabled = true
 [node name="BasicGun" type="Node2D" parent="." unique_id=1105378805]
 script = ExtResource("4_jmcll")
 ProjectileScene = ExtResource("5_4wape")
+FireRate = 0.0
+
+[node name="HealthDebugLogger" type="Node" parent="." unique_id=387965287]
+script = ExtResource("8_fk5o5")

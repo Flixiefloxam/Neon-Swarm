@@ -3,12 +3,10 @@ using NeonSwarm.Components;
 
 namespace NeonSwarm.Weapons;
 
-public partial class Projectile : Area2D
+public partial class Projectile : Node2D
 {
 	[Export] public float Speed = 400f;
-	[Export] public float Damage = 1f;
 	[Export] public float Lifetime = 2f;
-	[Export] public DamageFaction TargetFaction { get; set; } = DamageFaction.Enemy; // The faction that this projectile will damage.
 
 	private Vector2 _direction = Vector2.Right;
 	private float _lifeRemaining = 0f;
@@ -19,7 +17,6 @@ public partial class Projectile : Area2D
 		AddToGroup("Projectiles");
 
 		_lifeRemaining = Lifetime;
-		AreaEntered += OnAreaEntered;
 	}
 
     public override void _PhysicsProcess(double delta)
@@ -39,18 +36,5 @@ public partial class Projectile : Area2D
 
 		_direction = direction.Normalized();
 		Rotation = _direction.Angle();
-	}
-
-	// Damages compatible hurtboxes and destroys the projectile on hit.
-	private void OnAreaEntered(Area2D area)
-	{
-		if (area is not HurtboxComponent hurtbox)
-			return;
-
-		if (hurtbox.Faction != TargetFaction)
-			return;
-		
-		hurtbox.TakeDamage(Damage);
-		QueueFree();
 	}
 }
