@@ -40,6 +40,20 @@ public partial class HitboxComponent : Area2D
         }
     }
 
+    public bool IsOverlappingTargetFaction()
+    {
+        foreach (Area2D area in GetOverlappingAreas())
+        {
+            if (area is not HurtboxComponent hurtbox)
+                continue;
+            
+            if ((hurtbox.Faction & TargetFactions) != 0)
+                return true;
+        }
+        
+        return false;
+    }
+
     private void OnAreaEntered(Area2D area)
     {
         if (DamageMode != HitboxDamageMode.OnEnter)
@@ -92,5 +106,4 @@ public partial class HitboxComponent : Area2D
         else
             QueueFree();
     }
-
 }

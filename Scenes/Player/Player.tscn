@@ -19,8 +19,8 @@ size = Vector2(40, 40)
 [node name="Player" type="CharacterBody2D" unique_id=168775628 groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_ft8w5")
-EnemyPushStrength = 400.0
 BodyRadius = 16.0
+EnemyPushStrength = 400.0
 EnemyPushReachPadding = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1636370039]

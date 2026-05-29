@@ -2,7 +2,6 @@ using Godot;
 using NeonSwarm.Resources;
 using NeonSwarm.Visuals;
 using NeonSwarm.Components;
-using NeonSwarm.Player;
 
 namespace NeonSwarm.Enemies;
 
@@ -79,14 +78,20 @@ public partial class BaseEnemy : CharacterBody2D
 		Vector2 direction = (Target.GlobalPosition - GlobalPosition).Normalized();
 		Vector2 chaseVelocity = direction * Stats.MoveSpeed;
 
-		Vector2 enemySeparationVeclocity = GetEnemySeparationVelocity();
-		Vector2 playerSeparationVelocity = GetPlayerSeparationVelocity();
+		Vector2 enemySeparationVelocity = GetEnemySeparationVelocity();
+
+		if (_contactHitbox != null && _contactHitbox.IsOverlappingTargetFaction())
+		{
+			chaseVelocity = Vector2.Zero;
+			enemySeparationVelocity = RemoveVelocityTowardPlayer(enemySeparationVelocity);
+			_knockbackVelocity = RemoveVelocityTowardPlayer(_knockbackVelocity);
+			_pushVelocityThisFrame = RemoveVelocityTowardPlayer(_pushVelocityThisFrame);
+		}
 
 		// Combine all vectors to get the final velocity for this frame.
 		Velocity =
 			chaseVelocity +
-			enemySeparationVeclocity +
-			playerSeparationVelocity +
+			enemySeparationVelocity +
 			_knockbackVelocity +
 			_pushVelocityThisFrame;
 
@@ -159,36 +164,25 @@ public partial class BaseEnemy : CharacterBody2D
 		return separation * Stats.SeparationStrength;
 	}
 
-	private Vector2 GetPlayerSeparationVelocity()
+	// This function takes a velocity vector and removes any component of it that is directed toward the player.
+	private Vector2 RemoveVelocityTowardPlayer(Vector2 velocity)
 	{
-		if (Target == null || Stats == null)
-			return Vector2.Zero;
+		if (Target == null)
+			return velocity;
 
-		float playerRadius = 12f;
-
-		if (Target is PlayerController player)
-			playerRadius = player.BodyRadius;
-		
 		Vector2 awayFromPlayer = GlobalPosition - Target.GlobalPosition;
-		float distance = awayFromPlayer.Length();
 
-		if (distance <= 0.001f)
-		{
-			awayFromPlayer = Vector2.Right; // Arbitrary direction to push if exactly on top of the player.
-			distance = 0.001f; // Prevent division by zero and apply a small separation force.
-		}
+		if (awayFromPlayer.LengthSquared() <= 0.001f)
+			return velocity; // If the enemy is exactly on top of the player, don't modify the velocity.
 
-		float desiredDistance = 
-			BodyRadius +
-			playerRadius +
-			Stats.SeparationPadding;
+		Vector2 towardPlayer = -awayFromPlayer.Normalized();
 
-		if (distance >= desiredDistance)
-			return Vector2.Zero; // No need to apply separation if already far enough apart.
-		
-		float closeness = 1f - distance / desiredDistance; // How close the enemy is to the player, from 0 (at or beyond desired distance) to 1 (completely overlapping).
+		float inwardAmount = velocity.Dot(towardPlayer);
 
-		return awayFromPlayer.Normalized() * closeness * Stats.SeparationStrength;
+		if (inwardAmount <= 0f)
+			return velocity; // If the velocity is not directed toward the player, don't modify it.
+
+		return velocity - towardPlayer * inwardAmount; // Remove the component of the velocity that is directed toward the player.
 	}
 
 	protected virtual void Die()
