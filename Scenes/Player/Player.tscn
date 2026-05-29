@@ -12,15 +12,16 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fk5o5"]
-size = Vector2(28, 28)
+size = Vector2(40, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t26db"]
 
 [node name="Player" type="CharacterBody2D" unique_id=168775628 groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_ft8w5")
-EnemyPushStrength = 300.0
-BodyRadius = 25.0
+EnemyPushStrength = 400.0
+BodyRadius = 16.0
+EnemyPushReachPadding = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1636370039]
 shape = SubResource("RectangleShape2D_ft8w5")
@@ -67,6 +68,7 @@ drag_vertical_enabled = true
 [node name="BasicGun" type="Node2D" parent="." unique_id=1105378805]
 script = ExtResource("4_jmcll")
 ProjectileScene = ExtResource("5_4wape")
+FireRate = 0.0
 
 [node name="HealthDebugLogger" type="Node" parent="." unique_id=387965287]
 script = ExtResource("8_fk5o5")

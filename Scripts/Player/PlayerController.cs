@@ -7,11 +7,9 @@ namespace NeonSwarm.Player;
 public partial class PlayerController : CharacterBody2D
 {
 	[Export] public float MoveSpeed = 300.0f;
-	[Export] public float EnemyPushStrength { get; set; } = 250f; // The strength of the knockback applied to enemies when the player collides with them. Higher values result in stronger knockback.
-	// [Export] public float EnemyPushReach { get; set; } = 36f;
-	// [Export] public float EnemyPushHalfWidth { get; set; } = 14f;
-	[Export] public NodePath EnemyPushAreaPath { get; set; } = "EnemyPushArea"; // The path to the Area2D node used for detecting and pushing enemies on collision.
 	[Export] public float BodyRadius { get; set; } = 12f; // The radius of the player's body, used for calculating collisions and push effects.
+	[Export] public NodePath EnemyPushAreaPath { get; set; } = "EnemyPushArea"; // The path to the Area2D node used for detecting and pushing enemies on collision.
+	[Export] public float EnemyPushStrength { get; set; } = 250f; // The strength of the knockback applied to enemies when the player collides with them. Higher values result in stronger knockback.
 	[Export] public float EnemyPushReachPadding { get; set; } = 18f;
 	[Export] public float EnemyPushHalfWidthPadding { get; set; } = 2f;
 	[Export] public float EnemyPushSideBias { get; set; } = 0.1f; // How much to bias the push direction towards the side when pushing enemies. This prevent enemies from sticking to the player's face when moving directly into them, and makes the push feel more natural.
@@ -94,7 +92,26 @@ public partial class PlayerController : CharacterBody2D
 			Vector2 slideDirection = sideDirection * sideSign; // The direction to slide along the player's face.
 			Vector2 finalPushDirection = (awayFromPlayer + slideDirection * EnemyPushSideBias).Normalized(); // Combine the away direction with the slide direction to get the final push direction.
 
-			enemy.ApplyPush(finalPushDirection, EnemyPushStrength);
+			float forwardFactor = 1f - Mathf.Clamp(forwardDistance / pushReach, 0f, 1f); // Calculate a factor to reduce push strength based on how far the enemy is in front of the player. Enemies closer to the player get pushed stronger.
+			float sideFactor = 1f - Mathf.Clamp(sideDistance / pushHalfWidth, 0f, 1f); // Calculate a factor to reduce push strength based on how far the enemy is to the side. Enemies closer to the center get pushed stronger.
+
+			forwardFactor = Smooth01(forwardFactor);
+			sideFactor = Smooth01(sideFactor);
+
+			float pushFactor = forwardFactor * sideFactor; // Combine the forward and side factors to get the overall push factor.
+			float finalPushStrength = EnemyPushStrength * pushFactor;
+
+			if (finalPushStrength <= 0.01f)
+				continue; // Push is too weak to apply, so skip.
+
+			enemy.ApplyPush(finalPushDirection, finalPushStrength);
 		}
+	}
+
+	// A smoothstep function that eases the value in a smooth curve between 0 and 1. This is used to make the push strength falloff feel more natural.
+	private static float Smooth01(float value)
+	{
+		value = Mathf.Clamp(value, 0f, 1f);
+		return value * value * (3f - 2f * value); // Smoothstep
 	}
 }
