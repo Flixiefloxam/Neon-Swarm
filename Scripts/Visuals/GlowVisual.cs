@@ -13,13 +13,34 @@ public partial class GlowVisual : Node2D
     public override void _Ready()
     {
         _body = GetNodeOrNull<Sprite2D>("Body");
-        ApplyColor(BodyColor);
+        UpdateVisuals();
     }
 
+    // Used to apply both color and glow intensity at the same time.
+    public void ApplyVisuals(Color bodyColor, float glowIntensity)
+    {
+        BodyColor = bodyColor;
+        GlowIntensity = Mathf.Max(0f, glowIntensity); // Ensure glow intensity is not negative.
+        UpdateVisuals();
+    }
+
+    // Used to apply just the color, keeping the existing glow intensity.
     public void ApplyColor(Color bodyColor)
     {
         BodyColor = bodyColor;
+        UpdateVisuals();
+    }
 
+    // Used to apply just the glow intensity, keeping the existing color.
+    public void ApplyGlowIntensity(float intensity)
+    {
+        GlowIntensity = Mathf.Max(0f, intensity); // Ensure glow intensity is not negative.
+        UpdateVisuals();
+    }
+
+    // Updates the visuals based on the current BodyColor and GlowIntensity properties.
+    private void UpdateVisuals()
+    {
         if (_body == null)
         {
             GD.PushWarning($"{Name} has no Body Sprite2D.");
@@ -27,10 +48,10 @@ public partial class GlowVisual : Node2D
         }
 
         _body.SelfModulate = new Color(
-            bodyColor.R * GlowIntensity,
-            bodyColor.G * GlowIntensity,
-            bodyColor.B * GlowIntensity,
-            bodyColor.A
+            BodyColor.R * GlowIntensity,
+            BodyColor.G * GlowIntensity,
+            BodyColor.B * GlowIntensity,
+            BodyColor.A
         );
     }
 }

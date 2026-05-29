@@ -47,7 +47,7 @@ public partial class BaseEnemy : CharacterBody2D
 		_glowVisual = GetNodeOrNull<GlowVisual>("Visuals");
 		if (_glowVisual != null)
 		{
-			_glowVisual.ApplyColor(Stats.BodyColor);
+			_glowVisual.ApplyVisuals(Stats.BodyColor, Stats.GlowIntensity);
 		}
 		else
 		{
