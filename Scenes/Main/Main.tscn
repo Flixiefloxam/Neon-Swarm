@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cc4kkhj3k6cfb" path="res://Scenes/Environment/GridBackground.tscn" id="1_cmk6n"]
 [ext_resource type="PackedScene" uid="uid://dopdv3r8sqkey" path="res://Scenes/Player/Player.tscn" id="1_p8rbg"]
 [ext_resource type="PackedScene" uid="uid://eqrbk80ea8vy" path="res://Scenes/Spawners/EnemySpawner.tscn" id="2_cmk6n"]
+[ext_resource type="Script" uid="uid://d0xh7lb2781c2" path="res://Scripts/Enemies/EnemyCrowdManager.cs" id="2_o8wgc"]
 [ext_resource type="PackedScene" uid="uid://b15n0s6304222" path="res://Scenes/Enemies/Chaser.tscn" id="2_qtv3y"]
 
 [sub_resource type="Environment" id="Environment_cmk6n"]
@@ -18,6 +19,9 @@ glow_hdr_threshold = 0.7
 environment = SubResource("Environment_cmk6n")
 
 [node name="GridBackground" parent="." unique_id=229738081 instance=ExtResource("1_cmk6n")]
+
+[node name="EnemyCrowdManager" type="Node2D" parent="." unique_id=927347719]
+script = ExtResource("2_o8wgc")
 
 [node name="EnemyContainer" type="Node2D" parent="." unique_id=238785141]
 

@@ -30,7 +30,7 @@ public partial class BasicGun : Node2D
 		int shotsThisFrame = 0;
 		float secondsPerShot = 1f / FireRate;
 
-		if (_timeSinceLastShot < secondsPerShot) // This prevents a massive backlog of shots if there are no enemies to shoot at.
+		if (_timeSinceLastShot < secondsPerShot) // Charge up to roughly one ready shot without building a large backlog when no enemies are available.
         	_timeSinceLastShot += (float)delta;
 		
 		while (_timeSinceLastShot >= secondsPerShot)

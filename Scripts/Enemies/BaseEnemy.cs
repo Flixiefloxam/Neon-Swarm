@@ -1,7 +1,7 @@
 using Godot;
+using NeonSwarm.Components;
 using NeonSwarm.Resources;
 using NeonSwarm.Visuals;
-using NeonSwarm.Components;
 
 namespace NeonSwarm.Enemies;
 
@@ -9,15 +9,17 @@ public partial class BaseEnemy : CharacterBody2D
 {
 	[Export] public EnemyStats Stats {get; set;}
 
-	public float BodyRadius => Stats?.BodyRadius ?? 12f; // Fallback radius if Stats is not assigned.
+	public float CrowdRadius => Stats?.CrowdRadius ?? 7f;
+	public float CrowdMass => Mathf.Max(Stats?.CrowdMass ?? 1f, 0.01f);
 
 	protected HealthComponent Health;
-	protected Node2D Target; // The target node that the enemy will move towards.
+	protected Node2D Target;
 
 	private GlowVisual _glowVisual;
-	private HitboxComponent _contactHitbox; // The hitbox used for damaging the player on contact. This is set up in the scene and configured based on the enemy's stats.
+	private HitboxComponent _contactHitbox;
+
+	private Vector2 _movementVelocity = Vector2.Zero;
 	private Vector2 _knockbackVelocity = Vector2.Zero;
-	private Vector2 _pushVelocityThisFrame = Vector2.Zero;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -30,166 +32,127 @@ public partial class BaseEnemy : CharacterBody2D
 			GD.PushWarning($"{Name} has no EnemyStats assigned. Using default values.");
 			Stats = new EnemyStats();
 		}
+
+		FindTarget();
+		SetupHealth();
+		SetupVisuals();
+		SetupContactHitbox();
+	}
+
+	private void FindTarget()
+	{
 		Target = GetTree().GetFirstNodeInGroup("Player") as Node2D;
 
+		if (Target == null)
+			GD.PushWarning($"{Name} could not find Player target.");
+	}
+
+	private void SetupHealth()
+	{
 		Health = GetNodeOrNull<HealthComponent>("HealthComponent");
+
 		if (Health == null)
 		{
 			GD.PushWarning($"{Name} has no HealthComponent.");
-		}
-		else
-		{
-			Health.SetMaxHealth(Stats.MaxHealth);
-			Health.Died += Die;
+			return;
 		}
 
+		Health.SetMaxHealth(Stats.MaxHealth);
+		Health.Died += Die;
+	}
+
+	private void SetupVisuals()
+	{
 		_glowVisual = GetNodeOrNull<GlowVisual>("Visuals");
-		if (_glowVisual != null)
-		{
-			_glowVisual.ApplyVisuals(Stats.BodyColor, Stats.GlowIntensity);
-		}
-		else
+
+		if (_glowVisual == null)
 		{
 			GD.PushWarning($"{Name} has no GlowVisual child.");
+			return;
 		}
 
-		_contactHitbox = GetNodeOrNull<HitboxComponent>("ContactHitbox");
-		if (_contactHitbox != null)
-		{
-			_contactHitbox.Damage = Stats.ContactDamage;
-			_contactHitbox.TargetFactions = DamageFaction.Player;
-			_contactHitbox.DamageMode = HitboxDamageMode.OnCooldown;
-			_contactHitbox.AttackCooldown = Stats.ContactAttackCooldown;
-		}
-
+		_glowVisual.ApplyVisuals(Stats.BodyColor, Stats.GlowIntensity);
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _PhysicsProcess(double delta)
+	private void SetupContactHitbox()
 	{
-		if (Target == null || Stats == null)
+		_contactHitbox = GetNodeOrNull<HitboxComponent>("ContactHitbox");
+
+		if (_contactHitbox == null)
 			return;
 		
-		MoveTowardsTarget(delta);
+		_contactHitbox.Damage = Stats.ContactDamage;
+		_contactHitbox.TargetFactions = DamageFaction.Player;
+		_contactHitbox.DamageMode = HitboxDamageMode.OnCooldown;
+		_contactHitbox.AttackCooldown = Stats.ContactAttackCooldown;
 	}
 
-	protected virtual void MoveTowardsTarget(double delta)
+	// Sets what the enemy wants the current movement velocity to be (_movementVelocity) when factoring in acceleration.
+	public void PrepareCrowdMovement(double delta)
 	{
-		Vector2 direction = (Target.GlobalPosition - GlobalPosition).Normalized();
-		Vector2 chaseVelocity = direction * Stats.MoveSpeed;
+		if (Stats == null)
+			return;
+		
+		if (Target == null)
+			FindTarget();
+		
+		Vector2 desiredVelocity = GetDesiredVelocity();
 
-		Vector2 enemySeparationVelocity = GetEnemySeparationVelocity();
+		_movementVelocity = _movementVelocity.MoveToward(
+			desiredVelocity,
+			Stats.SteeringAcceleration * (float)delta
+		);
+	}
 
-		if (_contactHitbox != null && _contactHitbox.IsOverlappingTargetFaction())
-		{
-			chaseVelocity = Vector2.Zero;
-			enemySeparationVelocity = RemoveVelocityTowardPlayer(enemySeparationVelocity);
-			_knockbackVelocity = RemoveVelocityTowardPlayer(_knockbackVelocity);
-			_pushVelocityThisFrame = RemoveVelocityTowardPlayer(_pushVelocityThisFrame);
-		}
+	// Returns the combined vector of the movement velocity and the knockback velocity.
+	public Vector2 GetCrowdVelocity()
+	{
+		return _movementVelocity + _knockbackVelocity;
+	}
 
-		// Combine all vectors to get the final velocity for this frame.
-		Velocity =
-			chaseVelocity +
-			enemySeparationVelocity +
-			_knockbackVelocity +
-			_pushVelocityThisFrame;
+	// Returns the vector of the desired direction and speed of the enemy.
+	protected virtual Vector2 GetDesiredVelocity()
+	{
+		if (Target == null || Stats == null)
+			return Vector2.Zero;
 
-		MoveAndSlide();
+		Vector2 toTarget = Target.GlobalPosition - GlobalPosition;
 
-		_pushVelocityThisFrame = Vector2.Zero; // Reset push velocity after applying it for this frame to prevent it from compounding over multiple frames.
+		if (toTarget.LengthSquared() <= 0.001f)
+			return Vector2.Zero;
+		
+		return toTarget.Normalized() * Stats.MoveSpeed;
+	}
 
-		// Gradually reduce knockback velocity over time using damping.
+	// Sets the knockback velocity when knockback is applied.
+	public virtual void ApplyKnockback(Vector2 direction, float strength)
+	{
+		if (Stats == null || direction == Vector2.Zero)
+			return;
+		
+		float resistance = Mathf.Max(Stats.KnockbackResistance, 0.1f);
+		_knockbackVelocity += direction.Normalized() * (strength / resistance);
+	}
+
+	// Used to slowly reduce knockback velocity every frame after it's been applied
+	public void FinishCrowdMovement(double delta)
+	{
+		if (Stats == null)
+			return;
+		
 		_knockbackVelocity = _knockbackVelocity.MoveToward(
 			Vector2.Zero,
 			Stats.KnockbackDamping * (float)delta
 		);
 	}
 
-	public virtual void ApplyKnockback(Vector2 direction, float strength)
-	{
-		if (Stats == null || direction == Vector2.Zero)
-			return;
-		
-		float resistance = Mathf.Max(Stats.KnockbackResistance, 0.1f); // Prevent division by zero and ensure some knockback is applied.
-		_knockbackVelocity += direction.Normalized() * (strength / resistance);
-	}
-
-	public virtual void ApplyPush(Vector2 direction, float strength)
-	{
-		if (Stats == null || direction == Vector2.Zero)
-			return;
-
-		float resistance = Mathf.Max(Stats.KnockbackResistance, 0.1f); // Prevent division by zero and ensure some push is applied.
-		Vector2 pushVelocity = direction.Normalized() * (strength / resistance);
-
-		if (pushVelocity.LengthSquared() > _pushVelocityThisFrame.LengthSquared())
-			_pushVelocityThisFrame = pushVelocity;
-	}
-
-	private Vector2 GetEnemySeparationVelocity()
-	{
-		Vector2 separation = Vector2.Zero;
-
-		foreach (Node node in GetTree().GetNodesInGroup("Enemies"))
-		{
-			if (node == this)
-				continue;
-			
-			if (node is not BaseEnemy otherEnemy)
-				continue;
-			
-			Vector2 awayFromOther = GlobalPosition - otherEnemy.GlobalPosition;
-			float distance = awayFromOther.Length();
-
-			if (distance <=0.001f)
-			{
-				float angle = (GetInstanceId() % 360) * Mathf.Pi / 180f; // Unique angle based on instance ID to prevent enemies from overlapping in the same position.
-				awayFromOther = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-				distance = 0.001f; // Prevent division by zero and apply a small separation force.
-			}
-
-			float desiredDistance =
-				BodyRadius +
-				otherEnemy.BodyRadius +
-				Stats.SeparationPadding;
-			
-			if (distance >= desiredDistance)
-				continue; // No need to apply separation if already far enough apart.
-			
-			float closeness = 1f - distance / desiredDistance; // How close the enemies are to each other, from 0 (at or beyond desired distance) to 1 (completely overlapping).
-			separation += awayFromOther.Normalized() * closeness; // Stronger separation when closer to the other enemy.
-		}
-
-		return separation * Stats.SeparationStrength;
-	}
-
-	// This function takes a velocity vector and removes any component of it that is directed toward the player.
-	private Vector2 RemoveVelocityTowardPlayer(Vector2 velocity)
-	{
-		if (Target == null)
-			return velocity;
-
-		Vector2 awayFromPlayer = GlobalPosition - Target.GlobalPosition;
-
-		if (awayFromPlayer.LengthSquared() <= 0.001f)
-			return velocity; // If the enemy is exactly on top of the player, don't modify the velocity.
-
-		Vector2 towardPlayer = -awayFromPlayer.Normalized();
-
-		float inwardAmount = velocity.Dot(towardPlayer);
-
-		if (inwardAmount <= 0f)
-			return velocity; // If the velocity is not directed toward the player, don't modify it.
-
-		return velocity - towardPlayer * inwardAmount; // Remove the component of the velocity that is directed toward the player.
-	}
-
+	// Runs when the enemy dies
 	protected virtual void Die()
 	{
 		QueueFree();
 	}
 
+	// Runs when the enemy is about the be removed from the scene or the scene changes
 	public override void _ExitTree()
 	{
 		if (Health != null)

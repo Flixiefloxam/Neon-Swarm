@@ -18,6 +18,7 @@ size = Vector2(24, 24)
 size = Vector2(24, 24)
 
 [node name="Chaser" type="CharacterBody2D" unique_id=1393047655 groups=["Enemies"]]
+collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_eub6r")
 Stats = ExtResource("2_bjp27")

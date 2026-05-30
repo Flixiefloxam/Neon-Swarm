@@ -1,5 +1,4 @@
 using Godot;
-using NeonSwarm.Components;
 
 namespace NeonSwarm.Weapons;
 
