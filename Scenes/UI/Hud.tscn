@@ -24,6 +24,7 @@ offset_bottom = 62.0
 grow_horizontal = 2
 
 [node name="XPBar" type="ProgressBar" parent="Root/TopHud" unique_id=244831085]
+self_modulate = Color(0.6, 0, 1, 1)
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 show_percentage = false
