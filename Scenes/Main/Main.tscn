@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://eqrbk80ea8vy" path="res://Scenes/Spawners/EnemySpawner.tscn" id="2_cmk6n"]
 [ext_resource type="Script" uid="uid://d0xh7lb2781c2" path="res://Scripts/Enemies/EnemyCrowdManager.cs" id="2_o8wgc"]
 [ext_resource type="PackedScene" uid="uid://b15n0s6304222" path="res://Scenes/Enemies/Chaser.tscn" id="2_qtv3y"]
+[ext_resource type="PackedScene" uid="uid://bvu8l5dwales2" path="res://Scenes/UI/Hud.tscn" id="6_w20t6"]
 
 [sub_resource type="Environment" id="Environment_cmk6n"]
 background_mode = 3
@@ -31,3 +32,5 @@ script = ExtResource("2_o8wgc")
 EnemyScene = ExtResource("2_qtv3y")
 
 [node name="Player" parent="." unique_id=168775628 instance=ExtResource("1_p8rbg")]
+
+[node name="Hud" parent="." unique_id=876886334 instance=ExtResource("6_w20t6")]

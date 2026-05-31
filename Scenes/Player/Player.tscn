@@ -51,13 +51,13 @@ texture = ExtResource("2_ft8w5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1885920402]
 texture_filter = 1
+limit_enabled = false
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
 
 [node name="BasicGun" type="Node2D" parent="." unique_id=1105378805]
 script = ExtResource("4_jmcll")
 ProjectileScene = ExtResource("5_4wape")
-FireRate = 0.0
 
 [node name="HealthDebugLogger" type="Node" parent="." unique_id=387965287]
 script = ExtResource("8_fk5o5")
