@@ -5,7 +5,7 @@ using NeonSwarm.Visuals;
 
 namespace NeonSwarm.Enemies;
 
-public partial class BaseEnemy : CharacterBody2D
+public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 {
 	[Export] public EnemyStats Stats { get; set; }
 

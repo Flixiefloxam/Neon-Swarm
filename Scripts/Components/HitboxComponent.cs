@@ -18,6 +18,12 @@ public partial class HitboxComponent : Area2D
     [Export] public float AttackCooldown { get; set; } = 0.75f;
     [Export] public NodePath OwnerPath { get; set; } = "..";
 
+    [ExportGroup("Knockback")]
+    [Export] public float KnockbackStrength { get; set; } = 0f; // How much knockback this hitbox inflicts when it damages something.
+    [Export] public NodePath KnockbackOriginPath { get; set; } = ".."; // What node(and it's children) is actually getting knocked back.
+
+    public Vector2 KnockbackDirectionOverride { get; set; } = Vector2.Zero; // This is used as the knockback direction unless it's zero. Used by projectiles for more natural knockback.
+
     private readonly Dictionary<ulong, float> _cooldowns = new();
     private int _hitsTaken = 0;
 
@@ -75,12 +81,64 @@ public partial class HitboxComponent : Area2D
             return false;
 
         hurtbox.TakeDamage(Damage);
+        TryApplyKnockback(hurtbox);
+
         _cooldowns[hurtboxId] = AttackCooldown;
 
         if (HitsUntilDestroyed > 0 && ++_hitsTaken >= HitsUntilDestroyed)
             DestroyOwner();
 
         return true;
+    }
+
+    private void TryApplyKnockback(HurtboxComponent hurtbox)
+    {
+        if (KnockbackStrength <= 0f)
+            return;
+
+        IKnockbackReceiver receiver = FindKnockbackReceiver(hurtbox);
+
+        if (receiver == null)
+            return;
+        
+        Vector2 direction = GetKnockbackDirection(hurtbox);
+
+        if (direction == Vector2.Zero)
+            return;
+        
+        receiver.ApplyKnockback(direction, KnockbackStrength);
+    }
+
+    // Checks the hurtbox and then all of it's parents until it find a knockback receiver
+    private IKnockbackReceiver FindKnockbackReceiver(HurtboxComponent hurtbox)
+    {
+        Node node = hurtbox;
+
+        while (node != null)
+        {
+            if (node is IKnockbackReceiver receiver)
+                return receiver;
+            
+            node = node.GetParent();
+        }
+
+        return null;
+    }
+
+    private Vector2 GetKnockbackDirection(HurtboxComponent hurtbox)
+    {
+        if (KnockbackDirectionOverride.LengthSquared() > 0.001f)
+            return KnockbackDirectionOverride.Normalized();
+        
+        Node2D origin = GetNodeOrNull<Node2D>(KnockbackOriginPath);
+        Vector2 originPosition = origin?.GlobalPosition ?? GlobalPosition;
+
+        Vector2 direction = hurtbox.GlobalPosition - originPosition;
+
+        if (direction.LengthSquared() <= 0.001f)
+            return Vector2.Zero;
+        
+        return direction.Normalized();
     }
 
     private void UpdateCooldowns(float delta)

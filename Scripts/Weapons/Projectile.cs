@@ -1,4 +1,5 @@
 using Godot;
+using NeonSwarm.Components;
 
 namespace NeonSwarm.Weapons;
 
@@ -16,6 +17,7 @@ public partial class Projectile : Node2D
 		AddToGroup("Projectiles");
 
 		_lifeRemaining = Lifetime;
+		UpdateHitboxKnockbackDirection();
 	}
 
     public override void _PhysicsProcess(double delta)
@@ -35,5 +37,15 @@ public partial class Projectile : Node2D
 
 		_direction = direction.Normalized();
 		Rotation = _direction.Angle();
+
+		UpdateHitboxKnockbackDirection();
+	}
+
+	private void UpdateHitboxKnockbackDirection()
+	{
+		HitboxComponent hitbox = GetNodeOrNull<HitboxComponent>("Hitbox");
+
+		if (hitbox != null)
+			hitbox.KnockbackDirectionOverride = _direction;
 	}
 }
