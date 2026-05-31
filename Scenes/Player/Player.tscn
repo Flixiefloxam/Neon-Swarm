@@ -54,6 +54,7 @@ texture_filter = 1
 limit_enabled = false
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+editor_draw_drag_margin = true
 
 [node name="BasicGun" type="Node2D" parent="." unique_id=1105378805]
 script = ExtResource("4_jmcll")
