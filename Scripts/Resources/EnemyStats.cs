@@ -24,7 +24,7 @@ public partial class EnemyStats : Resource
     // ==================== Crowd Stats ====================
     [ExportGroup("Crowd")]
     [Export] public float CrowdRadius { get; set; } = 12f; // How big this enemy is considered by the Enemy crowd manager when preventing too much overlap.
-    [Export] public float CrowdMass { get; set; } = 1; // How heavy this enemy is in crowd movement. Higher calues make it harder to push.
+    [Export] public float CrowdMass { get; set; } = 1; // How heavy this enemy is in crowd movement. Higher values make it harder to push.
 
     // ==================== Knockback ====================
     [ExportGroup("Knockback")]

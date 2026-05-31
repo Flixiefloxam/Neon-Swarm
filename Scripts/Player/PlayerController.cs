@@ -5,7 +5,7 @@ namespace NeonSwarm.Player;
 public partial class PlayerController : CharacterBody2D
 {
 	[Export] public float MoveSpeed = 300.0f;
-	[Export] public float BodyRadius { get; set; } = 12f; // The radius of the player's body, used for calculating collisions and push effects.
+	[Export] public float BodyRadius { get; set; } = 12f; // The radius used by EnemyCrowdManager when pushing enemies away from the player.
 
 	private Vector2 _moveDirection = Vector2.Zero;
 

@@ -7,7 +7,7 @@ namespace NeonSwarm.Enemies;
 
 public partial class BaseEnemy : CharacterBody2D
 {
-	[Export] public EnemyStats Stats {get; set;}
+	[Export] public EnemyStats Stats { get; set; }
 
 	public float CrowdRadius => Stats?.CrowdRadius ?? 7f;
 	public float CrowdMass => Mathf.Max(Stats?.CrowdMass ?? 1f, 0.01f);
@@ -152,7 +152,7 @@ public partial class BaseEnemy : CharacterBody2D
 		QueueFree();
 	}
 
-	// Runs when the enemy is about the be removed from the scene or the scene changes
+	// Runs when the enemy is about to be removed from the scene or the scene changes
 	public override void _ExitTree()
 	{
 		if (Health != null)

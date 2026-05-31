@@ -12,7 +12,7 @@ public partial class HealthBar : Node2D
 
     [Export] public bool HideWhenFullHealth { get; set; } = false;
 
-    [Export] public Color BackGroundColor { get; set; } = new(0.04f, 0.04f, 0.06f, 0.85f); // The background color of the healthbar.
+    [Export] public Color BackgroundColor { get; set; } = new(0.04f, 0.04f, 0.06f, 0.85f); // The background color of the healthbar.
     [Export] public Color FillColor { get; set; } = Colors.Green; // The color of the filling bar indicating the current health level.
     [Export] public Color BorderColor { get; set; } = new(1f, 1f, 1f, 0.75f); // The color of the border of the healthbar
 
@@ -54,7 +54,7 @@ public partial class HealthBar : Node2D
 
         Rect2 backgroundRect = new(topLeft, BarSize);
 
-        DrawRect(backgroundRect, BackGroundColor, true);
+        DrawRect(backgroundRect, BackgroundColor, true);
 
         if (healthPercent > 0f)
         {
@@ -70,7 +70,7 @@ public partial class HealthBar : Node2D
         DrawRect(backgroundRect, BorderColor, false, 1f);
     }
 
-    // Updates the health bar when something about the health changes
+    // Updates and redraws the health bar when current or max health changes.
     private void OnHealthChanged(float currentHealth, float maxHealth)
     {
         _currentHealth = currentHealth;

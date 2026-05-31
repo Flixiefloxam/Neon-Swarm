@@ -178,7 +178,7 @@ public partial class EnemyCrowdManager : Node
                     OverlapCorrectionStrength;
                 
                 positions[enemyA] += correction * inverseMassA;
-                positions[enemyB] -= correction *inverseMassB;
+                positions[enemyB] -= correction * inverseMassB;
             }
         }
     }

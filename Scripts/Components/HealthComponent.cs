@@ -41,6 +41,7 @@ public partial class HealthComponent : Node
 	// Resets the entity's health to full and marks it as alive.
 	public void ResetHealth()
 	{
+		MaxHealth = Mathf.Max(1f, MaxHealth);
 		CurrentHealth = MaxHealth;
 		IsDead = false;
 		HealthChanged?.Invoke(CurrentHealth, MaxHealth);

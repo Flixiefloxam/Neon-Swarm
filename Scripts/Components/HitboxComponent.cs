@@ -89,7 +89,7 @@ public partial class HitboxComponent : Area2D
         
         foreach (ulong key in keys)
         {
-            _cooldowns[key] -=delta;
+            _cooldowns[key] -= delta;
 
             if (_cooldowns[key] <= 0f)
                 _cooldowns.Remove(key);
