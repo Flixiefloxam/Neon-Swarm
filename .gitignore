@@ -1,10 +1,28 @@
-# Godot 4+ specific ignores
+# Godot generated/cache files
 .godot/
-/android/
+.import/
+*.translation
+*.tmp
+.nomedia
 
-# IDE files
-.vs/
+# Godot export credentials / generated export files
+export.cfg
+export_credentials.cfg
 
-# C# build output
+# Godot 4.2+ temporary DLL files
+~*.dll
+
+# Godot Mono / .NET generated files
+.mono/
+data_*/
+mono_crash.*.json
 bin/
 obj/
+
+# IDE/editor folders
+.vs/
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
