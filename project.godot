@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Neon Swarm"
-run/main_scene="uid://v55sje8w80nu"
+run/main_scene="uid://bw4s313s3fjdb"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://bw4s313s3fjdb"]
+
+[ext_resource type="Script" uid="uid://pc5ax87sp8qe" path="res://Scripts/UI/MainMenu.cs" id="1_g18y6"]
+
+[node name="MainMenu" type="Control" unique_id=485684]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g18y6")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1985703842]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09985284, 0.09985284, 0.1897483, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1003961349]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=1069180938]
+custom_minimum_size = Vector2(360, 220)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=1078472580]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1122944083]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1806043196]
+layout_mode = 2
+text = "NEON SWARM"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=546856429]
+layout_mode = 2
+text = "Start Game"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1747517403]
+layout_mode = 2
+text = "Quit"

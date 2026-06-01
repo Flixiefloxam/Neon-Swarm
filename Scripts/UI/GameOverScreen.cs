@@ -4,7 +4,7 @@ namespace NeonSwarm.UI;
 
 public partial class GameOverScreen : Control
 {
-    [Export] public string MainMenuScenePath { get; set; } = ""; // TODO:Hook this up when the main menu actually exits
+    [Export] public string MainMenuScenePath { get; set; } = "res://Scenes/UI/MainMenu.tscn";
 
     private Label _timeSurvivedLabel;
     private Button _restartButton;
