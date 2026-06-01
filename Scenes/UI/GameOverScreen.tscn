@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://cxdbx2eua73kc"]
+
+[ext_resource type="Script" uid="uid://tsq3bw310bqv" path="res://Scripts/UI/GameOverScreen.cs" id="1_kjtn0"]
+
+[node name="GameOverScreen" type="Control" unique_id=22822792]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kjtn0")
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=682345314]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65000004)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1122334158]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=1666522849]
+custom_minimum_size = Vector2(360, 260)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=1076886557]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=622764705]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=379585065]
+layout_mode = 2
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="TimeSurvivedLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1773660724]
+layout_mode = 2
+text = "Time Survived: 00:00"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=660647047]
+layout_mode = 2
+text = "Restart"
+
+[node name="MainMenuButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1607798990]
+layout_mode = 2
+text = "Main Menu"

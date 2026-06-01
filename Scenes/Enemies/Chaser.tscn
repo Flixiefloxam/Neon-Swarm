@@ -14,8 +14,8 @@ size = Vector2(22, 22)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eub6r"]
 size = Vector2(24, 24)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wwpq2"]
-size = Vector2(24, 24)
+[sub_resource type="CircleShape2D" id="CircleShape2D_wwpq2"]
+radius = 14.0
 
 [node name="Chaser" type="CharacterBody2D" unique_id=1393047655 groups=["Enemies"]]
 collision_layer = 2
@@ -59,4 +59,4 @@ TargetFactions = 1
 DamageMode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ContactHitbox" unique_id=860506396]
-shape = SubResource("RectangleShape2D_wwpq2")
+shape = SubResource("CircleShape2D_wwpq2")
