@@ -5,6 +5,7 @@
 [ext_resource type="StyleBox" uid="uid://ddhcdjo8bt0wj" path="res://Resources/UI/Styles/NeonButtonNormal.tres" id="3_jgcw5"]
 [ext_resource type="StyleBox" uid="uid://sliglawb7ghk" path="res://Resources/UI/Styles/NeonButtonPressed.tres" id="4_jwv1t"]
 [ext_resource type="StyleBox" uid="uid://cbob5a51awi3e" path="res://Resources/UI/Styles/NeonPanelStyle.tres" id="5_gr5mo"]
+[ext_resource type="FontFile" uid="uid://bi36qliajtcto" path="res://Art/Fonts/Beon/Beon-Regular.ttf" id="6_wto4y"]
 
 [resource]
 default_font_size = 18
@@ -55,3 +56,4 @@ TitleLabel/constants/shadow_offset_x = 0
 TitleLabel/constants/shadow_offset_y = 0
 TitleLabel/constants/shadow_outline_size = 1
 TitleLabel/font_sizes/font_size = 40
+TitleLabel/fonts/font = ExtResource("6_wto4y")
