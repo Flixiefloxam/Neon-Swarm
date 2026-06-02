@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cxdbx2eua73kc"]
 
+[ext_resource type="Theme" uid="uid://cnw6br3oan74c" path="res://Resources/UI/Themes/NeonUITheme.tres" id="1_5dykx"]
 [ext_resource type="Script" uid="uid://tsq3bw310bqv" path="res://Scripts/UI/GameOverScreen.cs" id="1_kjtn0"]
 
 [node name="GameOverScreen" type="Control" unique_id=22822792]
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_5dykx")
 script = ExtResource("1_kjtn0")
 
 [node name="DimBackground" type="ColorRect" parent="." unique_id=682345314]
@@ -46,11 +48,13 @@ alignment = 1
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=379585065]
 layout_mode = 2
+theme_type_variation = &"TitleLabel"
 text = "GAME OVER"
 horizontal_alignment = 1
 
 [node name="TimeSurvivedLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1773660724]
 layout_mode = 2
+theme_type_variation = &"BodyLabel"
 text = "Time Survived: 00:00"
 horizontal_alignment = 1
 

@@ -8,6 +8,7 @@ public partial class MainMenu : Control
 
     private Button _startButton;
     private Button _quitButton;
+    private UiController _uiController;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -22,8 +23,9 @@ public partial class MainMenu : Control
 
 		_startButton.Pressed += OnStartPressed;
 		_quitButton.Pressed += OnQuitPressed;
+        _uiController = GetNodeOrNull<UiController>("/root/UiController");
 
-		_startButton.GrabFocus();
+        _uiController?.SetDefaultFocus(_startButton, true);
     }
 
     private void OnStartPressed()
@@ -49,5 +51,7 @@ public partial class MainMenu : Control
 
 		if (_quitButton != null)
 			_quitButton.Pressed -= OnQuitPressed;
+        
+        _uiController?.ClearDefaultFocus(_startButton);
 	}
 }

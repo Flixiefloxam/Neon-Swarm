@@ -1,0 +1,57 @@
+[gd_resource type="Theme" format=3 uid="uid://cnw6br3oan74c"]
+
+[ext_resource type="StyleBox" uid="uid://bu5bwpoqxphw1" path="res://Resources/UI/Styles/NeonButtonDisabled.tres" id="1_1yo32"]
+[ext_resource type="StyleBox" uid="uid://bkfgn2d3nnv8s" path="res://Resources/UI/Styles/NeonButtonHover.tres" id="2_wto4y"]
+[ext_resource type="StyleBox" uid="uid://ddhcdjo8bt0wj" path="res://Resources/UI/Styles/NeonButtonNormal.tres" id="3_jgcw5"]
+[ext_resource type="StyleBox" uid="uid://sliglawb7ghk" path="res://Resources/UI/Styles/NeonButtonPressed.tres" id="4_jwv1t"]
+[ext_resource type="StyleBox" uid="uid://cbob5a51awi3e" path="res://Resources/UI/Styles/NeonPanelStyle.tres" id="5_gr5mo"]
+
+[resource]
+default_font_size = 18
+BodyLabel/base_type = &"Label"
+BodyLabel/colors/font_color = Color(0.92941177, 1, 1, 1)
+BodyLabel/colors/font_outline_color = Color(0, 0.3137255, 0.38039216, 1)
+BodyLabel/colors/font_shadow_color = Color(0, 0.7372549, 0.85490197, 0.34901962)
+BodyLabel/constants/outline_size = 1
+BodyLabel/constants/shadow_offset_x = 0
+BodyLabel/constants/shadow_offset_y = 0
+BodyLabel/constants/shadow_outline_size = 1
+BodyLabel/font_sizes/font_size = 18
+Button/colors/font_color = Color(0.9309246, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.6262097, 0.7014107, 0.735357, 0.70000005)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(0.82665706, 1, 1, 1)
+Button/styles/disabled = ExtResource("1_1yo32")
+Button/styles/focus = ExtResource("2_wto4y")
+Button/styles/hover = ExtResource("2_wto4y")
+Button/styles/normal = ExtResource("3_jgcw5")
+Button/styles/pressed = ExtResource("4_jwv1t")
+HeaderLabel/base_type = &"Label"
+HeaderLabel/colors/font_color = Color(0.88235295, 1, 1, 1)
+HeaderLabel/colors/font_outline_color = Color(0, 0.42352942, 0.5058824, 1)
+HeaderLabel/colors/font_shadow_color = Color(0, 0.85490197, 1, 0.34901962)
+HeaderLabel/constants/outline_size = 1
+HeaderLabel/constants/shadow_offset_x = 0
+HeaderLabel/constants/shadow_offset_y = 0
+HeaderLabel/constants/shadow_outline_size = 1
+HeaderLabel/font_sizes/font_size = 26
+PanelContainer/styles/panel = ExtResource("5_gr5mo")
+SmallLabel/base_type = &"Label"
+SmallLabel/colors/font_color = Color(0.92941177, 1, 1, 1)
+SmallLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+SmallLabel/colors/font_shadow_color = Color(0, 0.627451, 0.7372549, 0.2509804)
+SmallLabel/constants/outline_size = 1
+SmallLabel/constants/shadow_offset_x = 0
+SmallLabel/constants/shadow_offset_y = 0
+SmallLabel/constants/shadow_outline_size = 1
+SmallLabel/font_sizes/font_size = 16
+TitleLabel/base_type = &"Label"
+TitleLabel/colors/font_color = Color(0.82665706, 1, 1, 1)
+TitleLabel/colors/font_outline_color = Color(0, 0.5370987, 0.6262097, 1)
+TitleLabel/colors/font_shadow_color = Color(0, 0.9309246, 1, 0.45000002)
+TitleLabel/constants/outline_size = 2
+TitleLabel/constants/shadow_offset_x = 0
+TitleLabel/constants/shadow_offset_y = 0
+TitleLabel/constants/shadow_outline_size = 1
+TitleLabel/font_sizes/font_size = 40

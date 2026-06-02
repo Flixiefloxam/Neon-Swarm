@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dnb1a5u7wgsre" path="res://Scripts/UI/Hud.cs" id="1_ks3ap"]
 [ext_resource type="PackedScene" uid="uid://cxdbx2eua73kc" path="res://Scenes/UI/GameOverScreen.tscn" id="2_6d7lo"]
+[ext_resource type="Theme" uid="uid://cnw6br3oan74c" path="res://Resources/UI/Themes/NeonUITheme.tres" id="2_b2arx"]
 
 [node name="Hud" type="CanvasLayer" unique_id=876886334]
 script = ExtResource("1_ks3ap")
@@ -13,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_b2arx")
 
 [node name="TopHud" type="VBoxContainer" parent="Root" unique_id=1916517960]
 layout_mode = 1
@@ -33,6 +35,7 @@ show_percentage = false
 [node name="TimerLabel" type="Label" parent="Root/TopHud" unique_id=905216235]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
+theme_type_variation = &"SmallLabel"
 text = "00:00"
 horizontal_alignment = 1
 

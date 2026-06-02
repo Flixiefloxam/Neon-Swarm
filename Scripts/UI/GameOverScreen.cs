@@ -9,6 +9,7 @@ public partial class GameOverScreen : Control
     private Label _timeSurvivedLabel;
     private Button _restartButton;
     private Button _mainMenuButton;
+    private UiController _uiController;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -27,6 +28,7 @@ public partial class GameOverScreen : Control
 
         _restartButton.Pressed += OnRestartPressed;
         _mainMenuButton.Pressed += OnMainMenuPressed;
+        _uiController = GetNodeOrNull<UiController>("/root/UiController");
 
         Hide();
     }
@@ -36,7 +38,7 @@ public partial class GameOverScreen : Control
         _timeSurvivedLabel.Text = $"Time Survived: {FormatTime(elapsedSeconds)}";
 
         Show();
-        _restartButton.GrabFocus();
+        _uiController?.SetDefaultFocus(_restartButton, true);
     }
 
     private void OnRestartPressed()
@@ -71,6 +73,8 @@ public partial class GameOverScreen : Control
 
 		if (_mainMenuButton != null)
 			_mainMenuButton.Pressed -= OnMainMenuPressed;
+
+        _uiController?.ClearDefaultFocus(_restartButton);
     }
 
 }

@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://bw4s313s3fjdb"]
 
 [ext_resource type="Script" uid="uid://pc5ax87sp8qe" path="res://Scripts/UI/MainMenu.cs" id="1_g18y6"]
+[ext_resource type="Script" uid="uid://btn8plc772o7y" path="res://Scripts/UI/MenuGridBackground.cs" id="2_mjmdf"]
+[ext_resource type="Texture2D" uid="uid://cojibb8i8djx3" path="res://Art/Sprites/BackgroundGridTile.png" id="3_72sra"]
+[ext_resource type="Theme" uid="uid://cnw6br3oan74c" path="res://Resources/UI/Themes/NeonUITheme.tres" id="6_m48tj"]
 
 [node name="MainMenu" type="Control" unique_id=485684]
 layout_mode = 3
@@ -9,16 +12,31 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("6_m48tj")
 script = ExtResource("1_g18y6")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1985703842]
+[node name="MenuGridBackground" type="Control" parent="." unique_id=1339858137]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.09985284, 0.09985284, 0.1897483, 1)
+mouse_filter = 2
+script = ExtResource("2_mjmdf")
+GridTexture = ExtResource("3_72sra")
+TintColor = Color(1, 1, 1, 1)
+
+[node name="DarkOverlay" type="ColorRect" parent="." unique_id=1985703842]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45000002)
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1003961349]
 layout_mode = 1
@@ -46,13 +64,16 @@ alignment = 1
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1806043196]
 layout_mode = 2
+theme_type_variation = &"TitleLabel"
 text = "NEON SWARM"
 horizontal_alignment = 1
 
 [node name="StartButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=546856429]
+custom_minimum_size = Vector2(220, 42)
 layout_mode = 2
 text = "Start Game"
 
 [node name="QuitButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1747517403]
+custom_minimum_size = Vector2(220, 42)
 layout_mode = 2
 text = "Quit"
