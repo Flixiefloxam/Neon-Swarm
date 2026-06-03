@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponStats" format=3 uid="uid://cerluiemu1pp7"]
+
+[ext_resource type="PackedScene" uid="uid://bpht8jkcbeev6" path="res://Scenes/Weapons/Projectile.tscn" id="1_11klw"]
+[ext_resource type="Script" uid="uid://cwonbsli5nx13" path="res://Scripts/Resources/WeaponStats.cs" id="1_rdlnn"]
+
+[resource]
+script = ExtResource("1_rdlnn")
+WeaponName = "Gun"
+ProjectileScene = ExtResource("1_11klw")
+FireRate = 10.0
+metadata/_custom_type_script = "uid://cwonbsli5nx13"

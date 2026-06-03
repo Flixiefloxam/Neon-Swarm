@@ -15,12 +15,12 @@ public partial class HitboxComponent : Area2D
     [Export] public DamageFaction TargetFactions { get; set; } = DamageFaction.None;
     [Export] public HitboxDamageMode DamageMode { get; set; } = HitboxDamageMode.OnEnter;
     [Export] public int HitsUntilDestroyed { get; set; } = 0; // 0 means infinite hits
-    [Export] public float AttackCooldown { get; set; } = 0.75f;
+    [Export] public float DamageCooldown { get; set; } = 0.75f;
     [Export] public NodePath OwnerPath { get; set; } = "..";
 
     [ExportGroup("Knockback")]
     [Export] public float KnockbackStrength { get; set; } = 0f; // How much knockback this hitbox inflicts when it damages something.
-    [Export] public NodePath KnockbackOriginPath { get; set; } = ".."; // What node(and it's children) is actually getting knocked back.
+    [Export] public NodePath KnockbackOriginPath { get; set; } = ".."; // The origin point used when calculating knockback direction.
 
     public Vector2 KnockbackDirectionOverride { get; set; } = Vector2.Zero; // This is used as the knockback direction unless it's zero. Used by projectiles for more natural knockback.
 
@@ -83,7 +83,7 @@ public partial class HitboxComponent : Area2D
         hurtbox.TakeDamage(Damage);
         TryApplyKnockback(hurtbox);
 
-        _cooldowns[hurtboxId] = AttackCooldown;
+        _cooldowns[hurtboxId] = DamageCooldown;
 
         if (HitsUntilDestroyed > 0 && ++_hitsTaken >= HitsUntilDestroyed)
             DestroyOwner();
@@ -109,7 +109,7 @@ public partial class HitboxComponent : Area2D
         receiver.ApplyKnockback(direction, KnockbackStrength);
     }
 
-    // Checks the hurtbox and then all of it's parents until it find a knockback receiver
+    // Checks the hurtbox and its parents until it finds a knockback receiver.
     private IKnockbackReceiver FindKnockbackReceiver(HurtboxComponent hurtbox)
     {
         Node node = hurtbox;

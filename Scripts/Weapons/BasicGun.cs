@@ -2,103 +2,51 @@ using Godot;
 
 namespace NeonSwarm.Weapons;
 
-public partial class BasicGun : Node2D
+public partial class BasicGun : BaseWeapon
 {
-	[Export] public PackedScene ProjectileScene { get; set; }
-	[Export] public float FireRate { get; set; } = 1f; // Number of shots per second. Higher values mean faster firing.
-	[Export] public float ProjectileSpawnOffset = 16f; // Distance from the gun's position where the projectile will spawn. 
-
-	private const int MaxShotsPerFrame = 5; // Maximum number of shots that can be fired in a single frame to prevent performance issues during frame rate drops.
-
-	private float _timeSinceLastShot = 0f;
-	private Node2D _projectileContainer;
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		_projectileContainer = GetOrCreateProjectileContainer();
-
-		if (_projectileContainer == null)
-			GD.PushError($"{Name} could not create or find a projectile container.");
-	}
-
-    public override void _PhysicsProcess(double delta)
-    {
-		if (FireRate <= 0f || ProjectileScene == null || _projectileContainer == null)
-			return;
-		
-		int shotsThisFrame = 0;
-		float secondsPerShot = 1f / FireRate;
-
-		if (_timeSinceLastShot < secondsPerShot) // Charge up to roughly one ready shot without building a large backlog when no enemies are available.
-        	_timeSinceLastShot += (float)delta;
-		
-		while (_timeSinceLastShot >= secondsPerShot)
-		{
-			if (shotsThisFrame >= MaxShotsPerFrame)
-			{
-				_timeSinceLastShot = 0f; // Reset the timer if too many shots happen in one frame, preventing the backlog of shots spilling over to the next frame.
-				break;
-			}
-
-			if (!TryShoot()) // Try to shoot at the nearest enemy. If there are no enemies, stop trying to shoot until the next frame.
-			{
-				break;
-			}
-
-			_timeSinceLastShot -= secondsPerShot; // Subtract the time for one shot to allow for consistent firing even if there are frame rate drops or a high fire rate.
-			shotsThisFrame++;
-		}
-    }
-
-	// Attempts to shoot at the nearest enemy.
-	private bool TryShoot()
+    // Attempts to shoot at the nearest enemy
+    protected override bool TryFire()
 	{
 		Node2D target = FindNearestEnemy();
 
 		if (target == null)
 			return false;
-
+		
 		return ShootAt(target);
 	}
 
-	// Shoots a projectile towards the specified target. The projectile will move in the direction of the target at the specified speed and deal damage on impact.
 	private bool ShootAt(Node2D target)
 	{
-		if (ProjectileScene == null)
-		{
-			GD.PushWarning($"{Name} has no ProjectileScene assigned.");
+		Vector2 toTarget = target.GlobalPosition - GlobalPosition;
+
+		if (toTarget.LengthSquared() <= 0.001f)
 			return false;
-		}
-
-		if (_projectileContainer == null)
-		{
-			GD.PushWarning($"{Name} has no projectile container.");
-			return false;
-		}
-
-		Vector2 direction = (target.GlobalPosition - GlobalPosition).Normalized();
-
-		Projectile projectile = ProjectileScene.Instantiate<Projectile>();
 		
-		Vector2 spawnPosition = GlobalPosition + direction * ProjectileSpawnOffset;
-		projectile.Position = _projectileContainer.ToLocal(spawnPosition);
-		projectile.SetDirection(direction);
+		Vector2 direction = toTarget.Normalized();
 
-		_projectileContainer.AddChild(projectile);
-		return true;
+		Vector2 spawnPosition =
+			GlobalPosition +
+			direction * RuntimeStats.ProjectileSpawnOffset;
+		
+		ProjectileSpawnData projectileData = CreateProjectileSpawnData(direction);
+
+		return SpawnProjectile(spawnPosition, projectileData) != null;
 	}
 
-	// Finds the nearest enemy in the scene and returns it. Returns null if there are no enemies.
+	// Finds nearest enemy in the scene. Returns null if there are no enemies.
 	private Node2D FindNearestEnemy()
 	{
 		Godot.Collections.Array<Node> enemies = GetTree().GetNodesInGroup("Enemies");
+
 		Node2D nearestEnemy = null;
 		float nearestDistanceSquared = float.MaxValue;
 
 		foreach (Node node in enemies)
 		{
 			if (node is not Node2D enemy)
+				continue;
+			
+			if (enemy.IsQueuedForDeletion())
 				continue;
 			
 			float distanceSquared = GlobalPosition.DistanceSquaredTo(enemy.GlobalPosition);
@@ -111,33 +59,5 @@ public partial class BasicGun : Node2D
 		}
 
 		return nearestEnemy;
-	}
-
-	// Retrieves the projectile container from the current scene, creating one if needed.
-	private Node2D GetOrCreateProjectileContainer()
-	{
-		Node parent = GetTree().CurrentScene ?? GetParent();
-
-		if (parent == null)
-		{
-			GD.PushWarning($"{Name} could not find a valid parent for ProjectileContainer.");
-			return null;
-		}
-
-		Node2D container = parent.GetNodeOrNull<Node2D>("ProjectileContainer");
-
-		if (container != null)
-			return container;
-
-		container = new Node2D
-		{
-			Name = "ProjectileContainer"
-		};
-
-		parent.AddChild(container);
-
-		GD.PushWarning($"{Name} couldn't find a ProjectileContainer. Created a temporary ProjectileContainer node. Please create a proper ProjectileContainer Node to avoid this warning.");
-
-		return container;
 	}
 }

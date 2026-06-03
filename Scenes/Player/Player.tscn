@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://ba0gw38a5ulg2" path="res://Scripts/Visuals/GlowVisual.cs" id="2_h54ih"]
 [ext_resource type="Script" uid="uid://bveur66pagmmk" path="res://Scripts/Components/HurtboxComponent.cs" id="3_t26db"]
 [ext_resource type="Script" uid="uid://doycjeqhsbhcc" path="res://Scripts/Weapons/BasicGun.cs" id="4_jmcll"]
-[ext_resource type="PackedScene" uid="uid://bpht8jkcbeev6" path="res://Scenes/Weapons/Projectile.tscn" id="5_4wape"]
+[ext_resource type="Resource" uid="uid://cerluiemu1pp7" path="res://Resources/Weapons/BasicGunStats.tres" id="7_fk5o5"]
 [ext_resource type="Script" uid="uid://cry5asqq0imq7" path="res://Scripts/UI/HealthBar.cs" id="9_825xp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
@@ -58,7 +58,7 @@ editor_draw_drag_margin = true
 
 [node name="BasicGun" type="Node2D" parent="." unique_id=1105378805]
 script = ExtResource("4_jmcll")
-ProjectileScene = ExtResource("5_4wape")
+BaseStats = ExtResource("7_fk5o5")
 
 [node name="HealthBar" type="Node2D" parent="." unique_id=1592291339]
 script = ExtResource("9_825xp")

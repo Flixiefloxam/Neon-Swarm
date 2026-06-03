@@ -84,7 +84,7 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 		_contactHitbox.Damage = Stats.ContactDamage;
 		_contactHitbox.TargetFactions = DamageFaction.Player;
 		_contactHitbox.DamageMode = HitboxDamageMode.OnCooldown;
-		_contactHitbox.AttackCooldown = Stats.ContactAttackCooldown;
+		_contactHitbox.DamageCooldown = Stats.ContactAttackCooldown;
 	}
 
 	// Sets what the enemy wants the current movement velocity to be (_movementVelocity) when factoring in acceleration.

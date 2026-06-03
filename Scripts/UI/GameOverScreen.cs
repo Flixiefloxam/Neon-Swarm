@@ -60,10 +60,10 @@ public partial class GameOverScreen : Control
     private static string FormatTime(double elapsedSeconds)
     {
         int totalSeconds = Mathf.Max(0, (int)elapsedSeconds);
-        int minuites = totalSeconds / 60;
+        int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;
 
-        return $"{minuites:00}:{seconds:00}";
+        return $"{minutes:00}:{seconds:00}";
     }
 
     public override void _ExitTree()

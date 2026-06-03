@@ -5,23 +5,23 @@ namespace NeonSwarm.Resources;
 [GlobalClass]
 public partial class EnemyStats : Resource
 {
-    // ==================== General Stats ====================
+    // ==================== General ====================
     [ExportGroup("General")]
     [Export] public string EnemyName { get; set; } = "Enemy"; // The name of the enemy.
     [Export] public int ScoreValue { get; set; } = 10; // The amount of points the player gets for defeating this enemy.
 
-    // ==================== Combat Stats ====================
+    // ==================== Combat ====================
     [ExportGroup("Combat")]
     [Export] public float MaxHealth { get; set; } = 3; // The maximum health of the enemy. When health reaches 0, the enemy dies.
     [Export] public float ContactDamage { get; set; } = 1; // The amount of damage the enemy deals to the player on contact.
     [Export] public float ContactAttackCooldown { get; set; } = 0.75f; // The cooldown time in seconds between contact damage instances.
 
-    // ==================== Movement Stats ====================
+    // ==================== Movement ====================
     [ExportGroup("Movement")]
     [Export] public float MoveSpeed { get; set; } = 200.0f; // The movement speed of the enemy.
     [Export] public float SteeringAcceleration { get; set;} = 2400f; // The acceleration of the enemy.
 
-    // ==================== Crowd Stats ====================
+    // ==================== Crowd ====================
     [ExportGroup("Crowd")]
     [Export] public float CrowdRadius { get; set; } = 12f; // How big this enemy is considered by the Enemy crowd manager when preventing too much overlap.
     [Export] public float CrowdMass { get; set; } = 1; // How heavy this enemy is in crowd movement. Higher values make it harder to push.

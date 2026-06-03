@@ -95,7 +95,7 @@ public partial class GameManager : Node
 		node.SetProcessUnhandledInput(false);
 	}
 
-	// This stops the provided node and it's children processing, freezing it.
+	// Stops the provided node and its children from processing.
 	private static void DisableProcessingRecursive(Node node)
 	{
 		if (node == null)
@@ -123,7 +123,7 @@ public partial class GameManager : Node
 	{
 		foreach (Node projectile in GetTree().GetNodesInGroup("Projectiles"))
 		{
-			DisableProcessingRecursive(projectile); // The recursive method is used here in order to disable projectile hitboxes aswell.
+			DisableProcessingRecursive(projectile); // The recursive method is used here to disable projectile hitboxes as well.
 		}
 	}
 
