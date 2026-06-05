@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b3dsp4iub64pi"]
+
+[ext_resource type="Script" uid="uid://berhkmuy112o4" path="res://Scripts/Pickups/XpGem.cs" id="1_xspf1"]
+
+[node name="XpGem" type="Node2D" unique_id=1320701986]
+script = ExtResource("1_xspf1")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=203790949]
+color = Color(0.5847179, 0, 1, 1)
+polygon = PackedVector2Array(0, -7, 6, 5, -6, 5)

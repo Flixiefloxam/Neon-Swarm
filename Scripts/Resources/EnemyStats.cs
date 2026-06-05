@@ -16,6 +16,11 @@ public partial class EnemyStats : Resource
     [Export] public float ContactDamage { get; set; } = 1; // The amount of damage the enemy deals to the player on contact.
     [Export] public float ContactAttackCooldown { get; set; } = 0.75f; // The cooldown time in seconds between contact damage instances.
 
+    // ==================== Rewards ====================
+    [ExportGroup("Rewards")]
+    [Export] public float ExperienceValue { get; set; } = 1f; // How much xp the enemy drops on death.
+    [Export] public PackedScene ExperiencePickupScene { get; set; } // The scene for the xp gem the enemy actually drops on death.
+
     // ==================== Movement ====================
     [ExportGroup("Movement")]
     [Export] public float MoveSpeed { get; set; } = 200.0f; // The movement speed of the enemy.

@@ -2,6 +2,7 @@ using Godot;
 using NeonSwarm.Components;
 using NeonSwarm.Resources;
 using NeonSwarm.Visuals;
+using NeonSwarm.Pickups;
 
 namespace NeonSwarm.Enemies;
 
@@ -146,9 +147,57 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 		);
 	}
 
+	// Drops an experience gem with the enemies xp value
+	private void DropExperience()
+	{
+		if (Stats  == null)
+			return;
+		
+		if (Stats.ExperienceValue <= 0f)
+			return;
+
+		if (Stats.ExperiencePickupScene == null)
+			return;
+		
+		if (Stats.ExperiencePickupScene.Instantiate() is not XpGem xpGem)
+		{
+			GD.PushWarning($"{Name}'s ExperiencePickupScene is not an XpGem.");
+			return;
+		}
+
+		Node2D pickupContainer = GetPickupContainer();
+
+		if (pickupContainer == null)
+		{
+			GD.PushWarning($"{Name} could not find a PickupContainer.");
+			xpGem.QueueFree();
+			return;
+		}
+
+		xpGem.ExperienceAmount = Stats.ExperienceValue;
+
+		// Set local position before AddChild to avoid spawning at the wrong world position for a frame.
+		xpGem.Position = pickupContainer.ToLocal(GlobalPosition);
+
+		pickupContainer.AddChild(xpGem);
+	}
+
+	private Node2D GetPickupContainer()
+	{
+		Node currentScene = GetTree().CurrentScene;
+
+		Node2D pickupContainer = currentScene?.GetNodeOrNull<Node2D>("PickupContainer");
+
+		if (pickupContainer != null)
+			return pickupContainer;
+
+		return GetParent() as Node2D ?? currentScene as Node2D;
+	}
+
 	// Runs when the enemy dies
 	protected virtual void Die()
 	{
+		DropExperience();
 		QueueFree();
 	}
 

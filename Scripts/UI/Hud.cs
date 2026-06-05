@@ -1,15 +1,19 @@
 using Godot;
+using NeonSwarm.Components;
 
 namespace NeonSwarm.UI;
 
 public partial class Hud : CanvasLayer
 {
+    [Export] public NodePath ExperienceComponentPath { get; set; } = "../Player/ExperienceComponent";
+
     private ProgressBar _xpBar;
     private Label _timerLabel;
     private GameOverScreen _gameOverScreen;
 
     private double _elapsedTime = 0.0;
     private bool _timerRunning = true;
+    private ExperienceComponent _experienceComponent;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -20,6 +24,23 @@ public partial class Hud : CanvasLayer
 
         SetXp(0, 100);
         UpdateTimerLabel();
+
+        _experienceComponent = GetNodeOrNull<ExperienceComponent>(ExperienceComponentPath);
+
+        if (_experienceComponent != null)
+        {
+            _experienceComponent.ExperienceChanged += OnExperienceChanged;
+
+            OnExperienceChanged(
+                _experienceComponent.CurrentExperience,
+                _experienceComponent.ExperienceToNextLevel,
+                _experienceComponent.CurrentLevel
+            );
+        }
+        else
+        {
+            SetXp(0, 100);
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,5 +76,16 @@ public partial class Hud : CanvasLayer
         int seconds = totalSeconds % 60;
 
         _timerLabel.Text = $"{minutes:00}:{seconds:00}";
+    }
+
+    private void OnExperienceChanged(float currentExperience, float experienceToNextLevel, int currentLevel)
+    {
+        SetXp(currentExperience, experienceToNextLevel);
+    }
+
+    public override void _ExitTree()
+    {
+        if (_experienceComponent != null)
+            _experienceComponent.ExperienceChanged -= OnExperienceChanged;
     }
 }

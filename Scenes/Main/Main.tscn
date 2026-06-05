@@ -29,9 +29,11 @@ ClearProjectilesOnGameOver = false
 [node name="EnemyCrowdManager" type="Node2D" parent="." unique_id=927347719]
 script = ExtResource("2_o8wgc")
 
-[node name="EnemyContainer" type="Node2D" parent="." unique_id=238785141]
+[node name="PickupContainer" type="Node2D" parent="." unique_id=16734559]
 
 [node name="ProjectileContainer" type="Node2D" parent="." unique_id=182134154]
+
+[node name="EnemyContainer" type="Node2D" parent="." unique_id=238785141]
 
 [node name="EnemySpawner" parent="." unique_id=851304664 instance=ExtResource("2_cmk6n")]
 EnemyScene = ExtResource("2_qtv3y")
