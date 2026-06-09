@@ -9,12 +9,16 @@ public partial class XpGem : Node2D
 
 	[Export] public float CollectionRadius { get; set; } = 16f; // Distance from the player at which the gem is collected.
 
+	[ExportGroup("Visuals")]
+	[Export] public Color BodyColor { get; set; } = new(0.8f, 0f, 1f, 1f);
+	[Export] public float GlowIntensity { get; set; } = 1.8f;
 	[Export] public float RotationSpeed { get; set; } = 2.5f;
 	[Export] public float PulseSpeed { get; set; } = 4f;
 	[Export] public float PulseAmount { get; set; } = 0.08f;
 
 	private Node2D _player;
 	private ExperienceComponent _experienceComponent;
+	private Polygon2D _body;
 
 	private Vector2 _baseScale = Vector2.One;
 	private float _time = 0f;
@@ -24,8 +28,10 @@ public partial class XpGem : Node2D
 	{
 		AddToGroup("Pickups");
 
+		_body = GetNodeOrNull<Polygon2D>("Body");
 		_baseScale = Scale;
-
+		
+		//ApplyVisuals();
 		FindPlayer();
 	}
 
@@ -70,5 +76,21 @@ public partial class XpGem : Node2D
 	{
 		_experienceComponent.AddExperience(ExperienceAmount);
 		QueueFree();
+	}
+
+	private void ApplyVisuals()
+	{
+		if (_body == null)
+		{
+			GD.PushWarning($"{Name} has no Body Polygon2D.");
+			return;
+		}
+
+		_body.Color = new Color(
+			BodyColor.R * GlowIntensity,
+			BodyColor.G * GlowIntensity,
+			BodyColor.B * GlowIntensity,
+			BodyColor.A
+		);
 	}
 }
