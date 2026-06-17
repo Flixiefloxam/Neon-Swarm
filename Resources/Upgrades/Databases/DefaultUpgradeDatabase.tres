@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="UpgradeDatabase" format=3 uid="uid://cjiaq5gxupjdb"]
+
+[ext_resource type="Script" uid="uid://dqrf1smqbfdrm" path="res://Scripts/Upgrades/UpgradeDefinition.cs" id="1_f6jeg"]
+[ext_resource type="Resource" uid="uid://gaqeh0jybjem" path="res://Resources/Upgrades/Definitions/BasicGun/Common/BasicGunDamageCommon.tres" id="2_6h3pg"]
+[ext_resource type="Script" uid="uid://lbo8hce1147e" path="res://Scripts/Upgrades/UpgradeDatabase.cs" id="2_pcmrm"]
+[ext_resource type="Resource" uid="uid://uxnjms8soe88" path="res://Resources/Upgrades/Definitions/BasicGun/Common/BasicGunFireRateCommon.tres" id="3_omy8j"]
+[ext_resource type="Resource" uid="uid://trrbur4gytr7" path="res://Resources/Upgrades/Definitions/BasicGun/Common/BasicGunKnockbackCommon.tres" id="4_btane"]
+[ext_resource type="Resource" uid="uid://dfb8uwfjrsagj" path="res://Resources/Upgrades/Definitions/BasicGun/Common/BasicGunProjectileSpeedCommon.tres" id="5_0f0dl"]
+[ext_resource type="Resource" uid="uid://cv2utbb0gj1pw" path="res://Resources/Upgrades/Definitions/BasicGun/Uncommon/BasicGunDamageUncommon.tres" id="6_of3mj"]
+[ext_resource type="Resource" uid="uid://dvlmijxceudly" path="res://Resources/Upgrades/Definitions/BasicGun/Uncommon/BasicGunFireRateUncommon.tres" id="7_7a05t"]
+[ext_resource type="Resource" uid="uid://ckgt6nvqpwkoj" path="res://Resources/Upgrades/Definitions/BasicGun/Rare/BasicGunDamageRare.tres" id="8_vh32l"]
+[ext_resource type="Resource" uid="uid://ce71swyqhbtx5" path="res://Resources/Upgrades/Definitions/BasicGun/Rare/BasicGunFireRateRare.tres" id="9_m1qhd"]
+
+[resource]
+script = ExtResource("2_pcmrm")
+Upgrades = Array[ExtResource("1_f6jeg")]([ExtResource("2_6h3pg"), ExtResource("3_omy8j"), ExtResource("4_btane"), ExtResource("5_0f0dl"), ExtResource("6_of3mj"), ExtResource("7_7a05t"), ExtResource("8_vh32l"), ExtResource("9_m1qhd")])
+metadata/_custom_type_script = "uid://lbo8hce1147e"

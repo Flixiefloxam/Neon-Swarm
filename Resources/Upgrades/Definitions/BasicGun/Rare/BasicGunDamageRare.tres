@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3 uid="uid://ckgt6nvqpwkoj"]
+
+[ext_resource type="Script" uid="uid://cw42uljt8bagv" path="res://Scripts/Upgrades/BaseUpgradeEffect.cs" id="1_7g8mn"]
+[ext_resource type="Script" uid="uid://dyqpp0o5wymko" path="res://Scripts/Upgrades/Effects/WeaponStatUpgradeEffect.cs" id="2_enlph"]
+[ext_resource type="Script" uid="uid://dqrf1smqbfdrm" path="res://Scripts/Upgrades/UpgradeDefinition.cs" id="3_ojj15"]
+
+[sub_resource type="Resource" id="Resource_etb7j"]
+script = ExtResource("2_enlph")
+Value = 4.0
+metadata/_custom_type_script = "uid://dyqpp0o5wymko"
+
+[resource]
+script = ExtResource("3_ojj15")
+UpgradeId = "basic_gun_damage_rare"
+DisplayName = "Neon Overload"
+Description = "Pistol damage +4"
+Rarity = 2
+MaxStacks = 2
+Effects = Array[ExtResource("1_7g8mn")]([SubResource("Resource_etb7j")])
+metadata/_custom_type_script = "uid://dqrf1smqbfdrm"

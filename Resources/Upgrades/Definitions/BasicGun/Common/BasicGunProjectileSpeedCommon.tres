@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3 uid="uid://dfb8uwfjrsagj"]
+
+[ext_resource type="Script" uid="uid://cw42uljt8bagv" path="res://Scripts/Upgrades/BaseUpgradeEffect.cs" id="1_x1ap0"]
+[ext_resource type="Script" uid="uid://dqrf1smqbfdrm" path="res://Scripts/Upgrades/UpgradeDefinition.cs" id="2_fibpw"]
+[ext_resource type="Script" uid="uid://dyqpp0o5wymko" path="res://Scripts/Upgrades/Effects/WeaponStatUpgradeEffect.cs" id="2_y3c6t"]
+
+[sub_resource type="Resource" id="Resource_1dv42"]
+script = ExtResource("2_y3c6t")
+Stat = 2
+Operation = 1
+Value = 1.15
+metadata/_custom_type_script = "uid://dyqpp0o5wymko"
+
+[resource]
+script = ExtResource("2_fibpw")
+UpgradeId = "basic_gun_projectile_speed_common"
+DisplayName = "Accelerator Rounds"
+Description = "Pistal projectile speed +15%"
+MaxStacks = 4
+Effects = Array[ExtResource("1_x1ap0")]([SubResource("Resource_1dv42")])
+metadata/_custom_type_script = "uid://dqrf1smqbfdrm"

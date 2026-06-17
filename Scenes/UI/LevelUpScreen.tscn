@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://86i8sps770gg"]
+
+[ext_resource type="Theme" uid="uid://cnw6br3oan74c" path="res://Resources/UI/Themes/NeonUITheme.tres" id="1_4473a"]
+[ext_resource type="PackedScene" uid="uid://c2sq1wd6xyb7e" path="res://Scenes/UI/UpgradeChoiceCard.tscn" id="2_gjcfp"]
+[ext_resource type="Script" uid="uid://c773eknuvjfmc" path="res://Scripts/UI/LevelUpScreen.cs" id="2_t6rig"]
+
+[node name="LevelUpScreen" type="Control" unique_id=492463767]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_4473a")
+script = ExtResource("2_t6rig")
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=1466869443]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65000004)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1595938094]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=1607438249]
+custom_minimum_size = Vector2(560, 470)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=210247241]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=448307811]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1113910143]
+layout_mode = 2
+theme_type_variation = &"NeonTitleLabel"
+text = "LEVEL UP"
+horizontal_alignment = 1
+
+[node name="InstructionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1921349750]
+layout_mode = 2
+theme_type_variation = &"NeonBodyLabel"
+text = "Level 2 - Choose and upgrade"
+horizontal_alignment = 1
+
+[node name="ChoicesContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1100927845]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ChoiceCard1" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ChoicesContainer" unique_id=1429544830 instance=ExtResource("2_gjcfp")]
+layout_mode = 2
+
+[node name="ChoiceCard2" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ChoicesContainer" unique_id=1199776275 instance=ExtResource("2_gjcfp")]
+layout_mode = 2
+
+[node name="ChoiceCard3" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ChoicesContainer" unique_id=1106280430 instance=ExtResource("2_gjcfp")]
+layout_mode = 2

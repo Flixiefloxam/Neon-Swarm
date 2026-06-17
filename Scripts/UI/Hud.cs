@@ -1,5 +1,7 @@
 using Godot;
+using System;
 using NeonSwarm.Components;
+using NeonSwarm.Upgrades;
 
 namespace NeonSwarm.UI;
 
@@ -10,10 +12,13 @@ public partial class Hud : CanvasLayer
     private ProgressBar _xpBar;
     private Label _timerLabel;
     private GameOverScreen _gameOverScreen;
+    private LevelUpScreen _levelUpScreen;
+
+    private ExperienceComponent _experienceComponent;
 
     private double _elapsedTime = 0.0;
     private bool _timerRunning = true;
-    private ExperienceComponent _experienceComponent;
+    public event Action<UpgradeDefinition> UpgradeSelected;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -21,9 +26,9 @@ public partial class Hud : CanvasLayer
         _xpBar = GetNode<ProgressBar>("Root/TopHud/XPBar");
         _timerLabel = GetNode<Label>("Root/TopHud/TimerLabel");
         _gameOverScreen = GetNode<GameOverScreen>("Root/GameOverScreen");
+        _levelUpScreen = GetNode<LevelUpScreen>("Root/LevelUpScreen");
 
-        SetXp(0, 100);
-        UpdateTimerLabel();
+        _levelUpScreen.UpgradeSelected += OnUpgradeSelected;
 
         _experienceComponent = GetNodeOrNull<ExperienceComponent>(ExperienceComponentPath);
 
@@ -41,6 +46,7 @@ public partial class Hud : CanvasLayer
         {
             SetXp(0, 100);
         }
+        UpdateTimerLabel();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -53,16 +59,31 @@ public partial class Hud : CanvasLayer
         UpdateTimerLabel();
     }
 
+    public void ShowLevelUpChoices(Godot.Collections.Array<UpgradeDefinition> choices)
+	{
+		_levelUpScreen.ShowChoices(choices);
+	}
+
+    public void HideLevelUpScreen()
+	{
+		_levelUpScreen.Hide();
+	}
+
     public void SetXp(float currentXp, float xpNeeded)
     {
         _xpBar.MaxValue = xpNeeded;
         _xpBar.Value = currentXp;
     }
 
-    public void StopGameTimer()
+    public void PauseGameTimer()
     {
         _timerRunning = false;
     }
+
+    public void ResumeGameTimer()
+	{
+		_timerRunning = true;
+	}
 
     public void ShowGameOverScreen()
     {
@@ -83,9 +104,17 @@ public partial class Hud : CanvasLayer
         SetXp(currentExperience, experienceToNextLevel);
     }
 
+    private void OnUpgradeSelected(UpgradeDefinition upgrade)
+	{
+		UpgradeSelected?.Invoke(upgrade);
+	}
+
     public override void _ExitTree()
     {
         if (_experienceComponent != null)
             _experienceComponent.ExperienceChanged -= OnExperienceChanged;
+        
+        if (_levelUpScreen != null)
+			_levelUpScreen.UpgradeSelected -= OnUpgradeSelected;
     }
 }

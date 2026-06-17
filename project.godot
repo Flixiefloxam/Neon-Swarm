@@ -36,6 +36,7 @@ Enemies="The enemies. Things that the player will autoshoot."
 Player="The Player Character"
 Projectiles="Projectiles fired by either the player or enemies"
 Pickups=""
+Weapons=""
 
 [input]
 

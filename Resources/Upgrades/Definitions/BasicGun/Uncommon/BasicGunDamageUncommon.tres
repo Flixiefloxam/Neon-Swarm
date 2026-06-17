@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3 uid="uid://cv2utbb0gj1pw"]
+
+[ext_resource type="Script" uid="uid://cw42uljt8bagv" path="res://Scripts/Upgrades/BaseUpgradeEffect.cs" id="1_30pm2"]
+[ext_resource type="Script" uid="uid://dyqpp0o5wymko" path="res://Scripts/Upgrades/Effects/WeaponStatUpgradeEffect.cs" id="2_8twgw"]
+[ext_resource type="Script" uid="uid://dqrf1smqbfdrm" path="res://Scripts/Upgrades/UpgradeDefinition.cs" id="3_e0wer"]
+
+[sub_resource type="Resource" id="Resource_etb7j"]
+script = ExtResource("2_8twgw")
+Value = 2.0
+metadata/_custom_type_script = "uid://dyqpp0o5wymko"
+
+[resource]
+script = ExtResource("3_e0wer")
+UpgradeId = "basic_gun_damage_uncommon"
+DisplayName = "Overcharged Rounds"
+Description = "Pistol damage +2"
+Rarity = 1
+MaxStacks = 3
+Effects = Array[ExtResource("1_30pm2")]([SubResource("Resource_etb7j")])
+metadata/_custom_type_script = "uid://dqrf1smqbfdrm"

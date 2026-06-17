@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using NeonSwarm.Components;
 using NeonSwarm.Resources;
 
@@ -12,6 +13,8 @@ public abstract partial class BaseWeapon : Node2D
 	[Export] public int MaxShotsPerFrame { get; set; } = 5;
 
 	public WeaponStats RuntimeStats { get; protected set; }
+	public string WeaponId => RuntimeStats?.WeaponId ?? BaseStats?.WeaponId ?? "";
+	public string WeaponName => RuntimeStats?.WeaponName ?? BaseStats?.WeaponName ?? Name;
 
 	protected Node2D ProjectileContainer { get; private set; }
 
@@ -20,11 +23,15 @@ public abstract partial class BaseWeapon : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		AddToGroup("Weapons");
+		
 		LoadStats();
 		ProjectileContainer = GetOrCreateProjectileContainer();
 
 		if (ProjectileContainer == null)
 			GD.PushError($"{Name} could not create or find a projectile container.");
+		if (string.IsNullOrWhiteSpace(WeaponId))
+			GD.PushWarning($"{Name} has no WeaponId.");
 	}
 
     public override void _PhysicsProcess(double delta)
@@ -54,6 +61,12 @@ public abstract partial class BaseWeapon : Node2D
 			_timeSinceLastShot -= secondsPerShot;
 			shotsThisFrame++;
 		}
+	}
+
+	public bool HasWeaponId(string weaponId)
+	{
+		return !string.IsNullOrWhiteSpace(weaponId) &&
+			string.Equals(WeaponId, weaponId, StringComparison.OrdinalIgnoreCase);
 	}
 
 	protected virtual void LoadStats()

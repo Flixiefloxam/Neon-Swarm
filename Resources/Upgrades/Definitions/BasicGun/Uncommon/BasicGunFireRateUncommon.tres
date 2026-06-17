@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3 uid="uid://dvlmijxceudly"]
+
+[ext_resource type="Script" uid="uid://cw42uljt8bagv" path="res://Scripts/Upgrades/BaseUpgradeEffect.cs" id="1_05tvx"]
+[ext_resource type="Script" uid="uid://dyqpp0o5wymko" path="res://Scripts/Upgrades/Effects/WeaponStatUpgradeEffect.cs" id="2_bt0q7"]
+[ext_resource type="Script" uid="uid://dqrf1smqbfdrm" path="res://Scripts/Upgrades/UpgradeDefinition.cs" id="3_oaod1"]
+
+[sub_resource type="Resource" id="Resource_iwe8n"]
+script = ExtResource("2_bt0q7")
+Stat = 1
+Operation = 1
+Value = 1.25
+metadata/_custom_type_script = "uid://dyqpp0o5wymko"
+
+[resource]
+script = ExtResource("3_oaod1")
+UpgradeId = "basic_gun_fire_rate_uncommon"
+DisplayName = "Rapid Cycling"
+Description = "Pistol fire rate +25%"
+Rarity = 1
+MaxStacks = 3
+Effects = Array[ExtResource("1_05tvx")]([SubResource("Resource_iwe8n")])
+metadata/_custom_type_script = "uid://dqrf1smqbfdrm"

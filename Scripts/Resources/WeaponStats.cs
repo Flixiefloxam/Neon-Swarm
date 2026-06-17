@@ -8,7 +8,8 @@ public partial class WeaponStats : Resource
 {
     // ==================== General ====================
     [ExportGroup("General")]
-    [Export] public string WeaponName { get; set; } = "Weapon";
+	[Export] public string WeaponId { get; set; } = "weapon_id"; // naming convention is snake_case
+    [Export] public string WeaponName { get; set; } = "Weapon"; // The name displayed on ingame Ui
 
 	// ==================== Firing ====================
 	[ExportGroup("Firing")]
