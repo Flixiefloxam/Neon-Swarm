@@ -82,7 +82,6 @@ public partial class LevelUpScreen : Control
 			return;
 
 		UpgradeSelected?.Invoke(upgrade);
-		Hide();
 	}
 
 	public override void _ExitTree()

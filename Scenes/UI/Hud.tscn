@@ -36,7 +36,7 @@ show_percentage = false
 [node name="TimerLabel" type="Label" parent="Root/TopHud" unique_id=905216235]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-theme_type_variation = &"SmallLabel"
+theme_type_variation = &"NeonSmallLabel"
 text = "00:00"
 horizontal_alignment = 1
 
