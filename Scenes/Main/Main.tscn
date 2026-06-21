@@ -43,6 +43,8 @@ script = ExtResource("2_o8wgc")
 
 [node name="EnemySpawner" parent="." unique_id=851304664 instance=ExtResource("2_cmk6n")]
 EnemyScene = ExtResource("2_qtv3y")
+StartingSpawnRate = 0.25
+SpawnDistanceFromPlayer = 1000.0
 
 [node name="Player" parent="." unique_id=168775628 instance=ExtResource("1_p8rbg")]
 
