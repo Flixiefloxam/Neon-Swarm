@@ -8,5 +8,4 @@ script = ExtResource("1_rdlnn")
 WeaponId = "basic_gun"
 WeaponName = "Pistol"
 ProjectileScene = ExtResource("1_11klw")
-FireRate = 0.0
 metadata/_custom_type_script = "uid://cwonbsli5nx13"

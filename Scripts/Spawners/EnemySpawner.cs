@@ -71,7 +71,7 @@ public partial class EnemySpawner : Node
 		_elapsedRunTime += deltaFloat;
 
 		_despawnAccumulator -= deltaFloat;
-		if (_despawnAccumulator >= DespawnCheckInterval)
+		if (_despawnAccumulator <= 0f)
 		{
 			_despawnAccumulator = Mathf.Max(DespawnCheckInterval, 0.1f);
 			DespawnFarEnemies();
@@ -167,10 +167,8 @@ public partial class EnemySpawner : Node
 		return _player.GlobalPosition + direction * SpawnDistanceFromPlayer;
 	}
 
-	// TODO: Find out why this doesn't seem to be running and why the enemy spawn rate doesn't seem to scale properly
 	private void DespawnFarEnemies()
 	{
-		GD.PushWarning($"Spawn Rate:{GetCurrentSpawnRate()}\nAlive Enemies:{GetAliveEnemyCount()}\nMax Alive Enemies:{GetCurrentMaxAliveEnemies()}");
 		float despawnDistanceSquared =
 			DespawnDistanceFromPlayer * DespawnDistanceFromPlayer;
 
