@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cxdbx2eua73kc" path="res://Scenes/UI/GameOverScreen.tscn" id="2_6d7lo"]
 [ext_resource type="Theme" uid="uid://cnw6br3oan74c" path="res://Resources/UI/Themes/NeonUITheme.tres" id="2_b2arx"]
 [ext_resource type="PackedScene" uid="uid://86i8sps770gg" path="res://Scenes/UI/LevelUpScreen.tscn" id="4_3ov73"]
+[ext_resource type="PackedScene" uid="uid://c6vw3xag2du8d" path="res://Scenes/UI/PauseMenu.tscn" id="5_duido"]
 
 [node name="Hud" type="CanvasLayer" unique_id=876886334]
 script = ExtResource("1_ks3ap")
@@ -45,5 +46,9 @@ visible = false
 layout_mode = 1
 
 [node name="LevelUpScreen" parent="Root" unique_id=492463767 instance=ExtResource("4_3ov73")]
+visible = false
+layout_mode = 1
+
+[node name="PauseMenu" parent="Root" unique_id=366103552 instance=ExtResource("5_duido")]
 visible = false
 layout_mode = 1

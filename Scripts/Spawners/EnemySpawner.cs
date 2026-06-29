@@ -167,8 +167,10 @@ public partial class EnemySpawner : Node
 		return _player.GlobalPosition + direction * SpawnDistanceFromPlayer;
 	}
 
+	// TODO: Find out why this doesn't seem to be running and why the enemy spawn rate doesn't seem to scale properly
 	private void DespawnFarEnemies()
 	{
+		GD.PushWarning($"Spawn Rate:{GetCurrentSpawnRate()}\nAlive Enemies:{GetAliveEnemyCount()}\nMax Alive Enemies:{GetCurrentMaxAliveEnemies()}");
 		float despawnDistanceSquared =
 			DespawnDistanceFromPlayer * DespawnDistanceFromPlayer;
 

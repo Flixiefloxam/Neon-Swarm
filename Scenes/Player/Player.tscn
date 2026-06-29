@@ -25,6 +25,7 @@ disabled = true
 [node name="HealthComponent" type="Node" parent="." unique_id=680411109]
 script = ExtResource("2_4wape")
 MaxHealth = 10.0
+IsInvulnerable = true
 
 [node name="ExperienceComponent" type="Node" parent="." unique_id=1656525418]
 script = ExtResource("3_825xp")

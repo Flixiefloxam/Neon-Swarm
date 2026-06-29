@@ -8,17 +8,22 @@ namespace NeonSwarm.UI;
 public partial class Hud : CanvasLayer
 {
     [Export] public NodePath ExperienceComponentPath { get; set; } = "../Player/ExperienceComponent";
+    [Export] public NodePath PauseMenuPath { get; set; } = "Root/PauseMenu";
 
     private ProgressBar _xpBar;
     private Label _timerLabel;
     private GameOverScreen _gameOverScreen;
     private LevelUpScreen _levelUpScreen;
-
     private ExperienceComponent _experienceComponent;
+    private PauseMenu _pauseMenu;
 
     private double _elapsedTime = 0.0;
     private bool _timerRunning = true;
+
     public event Action<UpgradeDefinition> UpgradeSelected;
+    public event Action ResumeRequested;
+    public event Action RestartRequested;
+    public event Action MainMenuRequested;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -27,6 +32,14 @@ public partial class Hud : CanvasLayer
         _timerLabel = GetNode<Label>("Root/TopHud/TimerLabel");
         _gameOverScreen = GetNode<GameOverScreen>("Root/GameOverScreen");
         _levelUpScreen = GetNode<LevelUpScreen>("Root/LevelUpScreen");
+        _pauseMenu = GetNodeOrNull<PauseMenu>(PauseMenuPath);
+
+        if (_pauseMenu != null)
+        {
+            _pauseMenu.ResumeRequested += OnPauseResumeRequested;
+            _pauseMenu.RestartRequested += OnPauseRestartRequested;
+            _pauseMenu.MainMenuRequested += OnPauseMainMenuRequested;
+        }
 
         _levelUpScreen.UpgradeSelected += OnUpgradeSelected;
 
@@ -109,6 +122,31 @@ public partial class Hud : CanvasLayer
 		UpgradeSelected?.Invoke(upgrade);
 	}
 
+    public void ShowPauseMenu()
+    {
+        _pauseMenu?.ShowMenu();
+    }
+
+    public void HidePauseMenu()
+    {
+        _pauseMenu?.HideMenu();
+    }
+
+    private void OnPauseResumeRequested()
+    {
+        ResumeRequested?.Invoke();
+    }
+
+    private void OnPauseRestartRequested()
+    {
+        RestartRequested?.Invoke();
+    }
+
+    private void OnPauseMainMenuRequested()
+    {
+        MainMenuRequested?.Invoke();
+    }
+
     public override void _ExitTree()
     {
         if (_experienceComponent != null)
@@ -116,5 +154,12 @@ public partial class Hud : CanvasLayer
         
         if (_levelUpScreen != null)
 			_levelUpScreen.UpgradeSelected -= OnUpgradeSelected;
+
+        if (_pauseMenu != null)
+        {
+            _pauseMenu.ResumeRequested -= OnPauseResumeRequested;
+            _pauseMenu.RestartRequested -= OnPauseRestartRequested;
+            _pauseMenu.MainMenuRequested -= OnPauseMainMenuRequested;
+        }
     }
 }

@@ -26,6 +26,7 @@ public partial class GameManager : Node
 	private ExperienceComponent _playerExperience;
 	private Node _enemyContainer;
 	private int _pendingUpgradeSelections = 0;
+	private bool _isPaused;
 
 	private bool _isGameOver = false;
 
@@ -54,6 +55,9 @@ public partial class GameManager : Node
 		else
 		{
 			_hud.UpgradeSelected += OnUpgradeSelected;
+			_hud.ResumeRequested += OnResumeRequested;
+			_hud.RestartRequested += OnRestartRequested;
+			_hud.MainMenuRequested += OnMainMenuRequested;
 		}
 		
 		_playerExperience = _player.GetNodeOrNull<ExperienceComponent>("ExperienceComponent");
@@ -83,6 +87,12 @@ public partial class GameManager : Node
 			GD.PushError($"{Name} could not find enemy container.");
 
 		_playerHealth.Died += OnPlayerDied;
+	}
+
+	public override void _UnhandledInput(InputEvent inputEvent)
+	{
+		if (inputEvent.IsActionPressed("pause"))
+			TogglePauseMenu();
 	}
 
 	private void OnPlayerLeveledUp(int newLevel)
@@ -127,6 +137,52 @@ public partial class GameManager : Node
 		}
 	}
 
+	private void TogglePauseMenu()
+	{
+		if (_isGameOver || _isChoosingUpgrade)
+			return;
+
+		if (_isPaused)
+			ResumeFromPauseMenu();
+		else
+			OpenPauseMenu();
+	}
+
+	private void OpenPauseMenu()
+	{
+		if (_isPaused)
+			return;
+
+		_isPaused = true;
+		PauseGameplay();
+		_hud.ShowPauseMenu();
+	}
+
+	private void ResumeFromPauseMenu()
+	{
+		if (!_isPaused)
+			return;
+
+		_isPaused = false;
+		_hud.HidePauseMenu();
+		ResumeGameplay();
+	}
+
+	private void OnResumeRequested()
+	{
+		ResumeFromPauseMenu();
+	}
+
+	private void OnMainMenuRequested()
+	{
+		GetTree().ChangeSceneToFile("res://Scenes/UI/MainMenu.tscn");
+	}
+
+	private void OnRestartRequested()
+	{
+		GetTree().ReloadCurrentScene();
+	}
+
 	private void OnUpgradeSelected(UpgradeDefinition upgrade)
 	{
 		if (!_isChoosingUpgrade)
@@ -144,7 +200,7 @@ public partial class GameManager : Node
 
 		TryBeginUpgradeSelection(); // Try to show another upgrade incase the player gained multiple levels at once
 
-		if (!_isChoosingUpgrade)
+		if (!_isChoosingUpgrade && !_isPaused)
 			ResumeGameplay();
 	}
 
