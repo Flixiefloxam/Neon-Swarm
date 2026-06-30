@@ -91,8 +91,15 @@ public partial class GameManager : Node
 
 	public override void _UnhandledInput(InputEvent inputEvent)
 	{
-		if (inputEvent.IsActionPressed("pause"))
-			TogglePauseMenu();
+		// This is setup this way so that holding the escape key doesn't spam toggle the pause menu.
+		if (!inputEvent.IsActionPressed("pause"))
+			return;
+
+		if (inputEvent is InputEventKey { Echo: true })
+			return;
+
+		TogglePauseMenu();
+		GetViewport().SetInputAsHandled();
 	}
 
 	private void OnPlayerLeveledUp(int newLevel)
@@ -333,7 +340,12 @@ public partial class GameManager : Node
 			_playerExperience.LeveledUp -= OnPlayerLeveledUp;
 		
 		if (_hud != null)
+		{
 			_hud.UpgradeSelected -= OnUpgradeSelected;
+			_hud.ResumeRequested -= OnResumeRequested;
+			_hud.RestartRequested -= OnRestartRequested;
+			_hud.MainMenuRequested -= OnMainMenuRequested;
+		}
 	}
 
 }

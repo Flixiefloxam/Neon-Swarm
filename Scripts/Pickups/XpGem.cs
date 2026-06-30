@@ -31,7 +31,7 @@ public partial class XpGem : Node2D
 		_body = GetNodeOrNull<Polygon2D>("Body");
 		_baseScale = Scale;
 		
-		//ApplyVisuals();
+		ApplyVisuals();
 		FindPlayer();
 	}
 
@@ -86,10 +86,12 @@ public partial class XpGem : Node2D
 			return;
 		}
 
+		float glowIntensity = Mathf.Max(0f, GlowIntensity);
+
 		_body.Color = new Color(
-			BodyColor.R * GlowIntensity,
-			BodyColor.G * GlowIntensity,
-			BodyColor.B * GlowIntensity,
+			BodyColor.R * glowIntensity,
+			BodyColor.G * glowIntensity,
+			BodyColor.B * glowIntensity,
 			BodyColor.A
 		);
 	}

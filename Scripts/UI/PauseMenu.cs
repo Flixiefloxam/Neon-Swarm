@@ -54,12 +54,15 @@ public partial class PauseMenu : Control
 		Show();
 
 		if (_resumeButton != null)
-			_uiController?.SetDefaultFocus(_restartButton, true);
+			_uiController?.SetDefaultFocus(_resumeButton, true);
 	}
 
 	public void HideMenu()
 	{
 		Hide();
+
+		if (_resumeButton != null)
+			_uiController?.ClearDefaultFocus(_resumeButton);
 	}
 
 	private void OnResumePressed()
