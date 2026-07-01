@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EnemyStats" format=3 uid="uid://dffwx3mhe0qoe"]
+
+[ext_resource type="PackedScene" uid="uid://b3dsp4iub64pi" path="res://Scenes/Pickups/XpGem.tscn" id="1_rb8ri"]
+[ext_resource type="Script" uid="uid://cf26205gw6f1s" path="res://Scripts/Resources/EnemyStats.cs" id="2_fdf2b"]
+
+[resource]
+script = ExtResource("2_fdf2b")
+EnemyName = "Brute"
+ScoreValue = 30
+MaxHealth = 10.0
+ContactDamage = 2.0
+ContactAttackCooldown = 0.9
+ExperienceValue = 3.0
+ExperiencePickupScene = ExtResource("1_rb8ri")
+MoveSpeed = 85.0
+SteeringAcceleration = 1400.0
+VisualScale = 1.35
+HurtboxSize = 36.0
+ContactHitboxRadius = 22.0
+CrowdRadius = 20.0
+CrowdMass = 3.0
+KnockbackResistance = 2.5
+KnockbackDamping = 650.0
+BodyColor = Color(1, 0.7019608, 0.24705882, 1)
+GlowIntensity = 1.4
+metadata/_custom_type_script = "uid://cf26205gw6f1s"

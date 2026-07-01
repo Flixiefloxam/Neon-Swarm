@@ -16,7 +16,7 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 	protected HealthComponent Health;
 	protected Node2D Target;
 
-	private GlowVisual _glowVisual;
+	private GlowVisual _visuals;
 	private HitboxComponent _contactHitbox;
 
 	private Vector2 _movementVelocity = Vector2.Zero;
@@ -37,6 +37,7 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 		FindTarget();
 		SetupHealth();
 		SetupVisuals();
+		SetupSize();
 		SetupContactHitbox();
 	}
 
@@ -64,15 +65,87 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 
 	private void SetupVisuals()
 	{
-		_glowVisual = GetNodeOrNull<GlowVisual>("Visuals");
+		_visuals = GetNodeOrNull<GlowVisual>("Visuals");
 
-		if (_glowVisual == null)
+		if (_visuals == null)
 		{
 			GD.PushWarning($"{Name} has no GlowVisual child.");
 			return;
 		}
 
-		_glowVisual.ApplyVisuals(Stats.BodyColor, Stats.GlowIntensity);
+		_visuals.ApplyVisuals(Stats.BodyColor, Stats.GlowIntensity);
+	}
+
+	private void SetupSize()
+	{
+		ApplyVisualScale();
+		ApplySquareShapeSize("Hurtbox/CollisionShape2D", Stats.HurtboxSize);
+		ApplyCircleShapeRadius("ContactHitbox/CollisionShape2D", Stats.ContactHitboxRadius);
+	}
+
+	private void ApplyVisualScale()
+	{
+		if (_visuals == null)
+			return;
+		
+		float visualScale = Mathf.Max(Stats.VisualScale, 0.01f);
+		_visuals.Scale = Vector2.One * visualScale;
+	}
+
+	private void ApplySquareShapeSize(string collisionShapePath, float size)
+	{
+		CollisionShape2D collisionShape = GetNodeOrNull<CollisionShape2D>(collisionShapePath);
+
+		if (collisionShape == null)
+		{
+			GD.PushWarning($"{Name} could not find CollisionShape2D at '{collisionShapePath}'.");
+			return;
+		}
+
+		if (collisionShape.Shape is not RectangleShape2D rectangleShape)
+		{
+			GD.PushWarning($"{Name}'s CollisionShape2D at '{collisionShapePath}' is not a RectangleShape2D.");
+			return;
+		}
+
+		float safeSize = Mathf.Max(size, 1f);
+
+		// Duplicate before editing so this enemy instance does not mutate a shared scene resource.
+		RectangleShape2D uniqueShape = rectangleShape.Duplicate() as RectangleShape2D;
+
+		if (uniqueShape == null)
+			return;
+		
+		uniqueShape.Size = Vector2.One * safeSize;
+		collisionShape.Shape = uniqueShape;
+	}
+
+	private void ApplyCircleShapeRadius(string collisionShapePath, float radius)
+	{
+		CollisionShape2D collisionShape = GetNodeOrNull<CollisionShape2D>(collisionShapePath);
+
+		if (collisionShape == null)
+		{
+			GD.PushWarning($"{Name} could not find CollisionShape2D at '{collisionShapePath}'.");
+			return;
+		}
+
+		if (collisionShape.Shape is not CircleShape2D circleShape)
+		{
+			GD.PushWarning($"{Name}'s CollisionShape2D at '{collisionShapePath}' is not a CircleShape2D.");
+			return;
+		}
+
+		float safeRadius = Mathf.Max(radius, 1f);
+
+		// Duplicate before editing so this enemy instance does not mutate a shared scene resource.
+		CircleShape2D uniqueShape = circleShape.Duplicate() as CircleShape2D;
+
+		if (uniqueShape == null)
+			return;
+		
+		uniqueShape.Radius = safeRadius;
+		collisionShape.Shape = uniqueShape;
 	}
 
 	private void SetupContactHitbox()
@@ -135,7 +208,7 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 		_knockbackVelocity += direction.Normalized() * (strength / resistance);
 	}
 
-	// Used to slowly reduce knockback velocity every frame after it's been applied
+	// Gradually reduces knockback velocity after it has been applied.
 	public void FinishCrowdMovement(double delta)
 	{
 		if (Stats == null)
@@ -147,7 +220,7 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 		);
 	}
 
-	// Drops an experience gem with the enemies xp value
+	// Drops an experience gem using this enemy's XP value.
 	private void DropExperience()
 	{
 		if (Stats  == null)

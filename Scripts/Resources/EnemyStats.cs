@@ -26,6 +26,12 @@ public partial class EnemyStats : Resource
     [Export] public float MoveSpeed { get; set; } = 200.0f; // The movement speed of the enemy.
     [Export] public float SteeringAcceleration { get; set;} = 2400f; // The acceleration of the enemy.
 
+    // ==================== Size ====================
+    [ExportGroup("Size")]
+    [Export] public float VisualScale { get; set; } = 1f; // Multiplies the enemy Visuals node scale.
+    [Export] public float HurtboxSize { get; set; } = 24f; // Square hurtbox size.
+    [Export] public float ContactHitboxRadius { get; set; } = 14f; // Circle contact hitbox radius.
+
     // ==================== Crowd ====================
     [ExportGroup("Crowd")]
     [Export] public float CrowdRadius { get; set; } = 12f; // How big this enemy is considered by the Enemy crowd manager when preventing too much overlap.
