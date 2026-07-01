@@ -10,16 +10,17 @@ public partial class EnemySpawner : Node
 	[Export] public float StartingSpawnRate { get; set; } = 0.5f; // Starting enemies spawned per second.
 	[Export] public float SpawnRateIncreasePerMinute { get; set; } = 0.35f;
 	[Export] public float MaxSpawnRate { get; set; } = 5f; // Maximum spawn rate per second for performance reasons.
-	[Export] public float SpawnDistanceFromPlayer { get; set; } = 700f; // How far from the player the enemies spawn
+	[Export] public float SpawnDistanceFromPlayer { get; set; } = 700f; // How far from the player the enemies spawn.
+	[Export] public bool SpawnImmediatelyOnStart { get; set; } = true; // Does an enemy spawn as soon as this spawner is ready, so the player doesn't have to wait.
 
 	[ExportGroup("Alive Cap")]
-	[Export] public int StartingMaxAliveEnemies { get; set; } = 50; // Starting cap for simultaneously alive enemies
+	[Export] public int StartingMaxAliveEnemies { get; set; } = 50; // Starting cap for simultaneously alive enemies.
 	[Export] public float MaxAliveIncreasePerMinute { get; set; } = 35f;
 	[Export] public int AbsoluteMaxAliveEnemies { get; set; } = 250; // Highest the enemy cap can go for performance reasons.
 
 	[ExportGroup("Despawning")]
-	[Export] public float DespawnDistanceFromPlayer { get; set; } = 1600f; // Max distance from the player enemies can be before being despawned
-	[Export] public float DespawnCheckInterval { get; set; } = 1f; // Time between each check to see if any enemies need to be despawned in seconds
+	[Export] public float DespawnDistanceFromPlayer { get; set; } = 1600f; // Max distance from the player enemies can be before being despawned.
+	[Export] public float DespawnCheckInterval { get; set; } = 1f; // Time between each check to see if any enemies need to be despawned in seconds.
 
 	private Node2D _player;
 	private Node2D _enemyContainer;
@@ -34,13 +35,13 @@ public partial class EnemySpawner : Node
 	{
 		_rng.Randomize();
 		_despawnAccumulator = Mathf.Max(DespawnCheckInterval, 0.1f);
-		_spawnAccumulator = 1f; // Have it so that one enemy spawn as soon as you load into the level so you don't need to wait.
+		_spawnAccumulator = SpawnImmediatelyOnStart ? 1f : 0f;
 
 		FindPlayer();
 		_enemyContainer = GetOrCreateEnemyContainer();
 
 		if (_enemyContainer == null)
-    		GD.PushError($"{Name} could not create or find an enemy container.");
+			GD.PushError($"{Name} could not create or find an enemy container.");
 
 		if (_player == null)
 			GD.PushWarning($"{Name} could not find a Player node.");
@@ -86,23 +87,24 @@ public partial class EnemySpawner : Node
 			return;
 		
 		int currentMaxAliveEnemies = GetCurrentMaxAliveEnemies();
+		int aliveEnemyCount = GetAliveEnemyCount();
 
-		if (GetAliveEnemyCount() >= currentMaxAliveEnemies)
+		if (aliveEnemyCount >= currentMaxAliveEnemies)
 			return;
 
 		_spawnAccumulator += deltaFloat * currentSpawnRate;
 
-		while (_spawnAccumulator >= 1f)
+		while (_spawnAccumulator >= 1f && aliveEnemyCount < currentMaxAliveEnemies)
 		{
-			if (GetAliveEnemyCount() >= currentMaxAliveEnemies)
-			{
-				// Avoid storing up a huge spawn backlog while capped.
-				_spawnAccumulator = 0f;
-				break;
-			}
-
 			SpawnEnemy();
+			aliveEnemyCount++;
 			_spawnAccumulator -= 1f; // Subtract one spawn from the accumulator to allow for consistent spawning even if there are frame rate drops or a high spawn rate.
+		}
+
+		if (aliveEnemyCount >= currentMaxAliveEnemies)
+		{
+			// Avoid storing up a huge spawn backlog while capped.
+			_spawnAccumulator = 0f;
 		}
 	}
 
@@ -110,24 +112,27 @@ public partial class EnemySpawner : Node
 	{
 		float minutesAlive = _elapsedRunTime / 60f;
 
-		return Mathf.Min(
-			StartingSpawnRate + SpawnRateIncreasePerMinute * minutesAlive,
-			MaxSpawnRate
-		);
+		float scaledSpawnRate = StartingSpawnRate + SpawnRateIncreasePerMinute * minutesAlive;
+
+		float spawnRateCap = Mathf.Max(MaxSpawnRate, 0f);
+
+		return Mathf.Clamp(scaledSpawnRate, 0f, spawnRateCap);
 	}
 
 	private int GetCurrentMaxAliveEnemies()
 	{
 		float minutesAlive = _elapsedRunTime / 60f;
 
+		int startingCap = Mathf.Max(StartingMaxAliveEnemies, 0);
+
 		int scaledMaxAlive =
-			StartingMaxAliveEnemies +
+			startingCap +
 			(int)Mathf.Floor(MaxAliveIncreasePerMinute * minutesAlive);
 		
 		// If the starting enemy cap is bigger than the absolute enemy cap for some reason, then just use that.
-		int absoluteCap = Mathf.Max(AbsoluteMaxAliveEnemies, StartingMaxAliveEnemies);
+		int absoluteCap = Mathf.Max(AbsoluteMaxAliveEnemies, startingCap);
 
-		return Mathf.Min(scaledMaxAlive, absoluteCap);
+		return Mathf.Clamp(scaledMaxAlive, 0, absoluteCap);
 	}
 
 	private int GetAliveEnemyCount()
@@ -155,7 +160,8 @@ public partial class EnemySpawner : Node
 		_enemyContainer.AddChild(enemyInstance);
 	}
 
-	// Calculates a random spawn position around the player at a specified distance. The spawn position is determined by generating a random angle and placing the enemy at that angle from the player.
+	// Calculates a random spawn position around the player at a specified distance.
+	// The spawn position is determined by generating a random angle and placing the enemy at that angle from the player.
 	private Vector2 GetSpawnPosition()
 	{
 		float angle = _rng.RandfRange(0f, Mathf.Tau);
@@ -179,7 +185,7 @@ public partial class EnemySpawner : Node
 			if (node is not Node2D enemy)
 				continue;
 			
-			if(enemy.IsQueuedForDeletion())
+			if (enemy.IsQueuedForDeletion())
 				continue;
 			
 			float distanceSquared =
@@ -211,7 +217,7 @@ public partial class EnemySpawner : Node
 		Node2D container = parent.GetNodeOrNull<Node2D>("EnemyContainer");
 
 		if (container != null)
-        	return container;
+			return container;
 
 		container = new Node2D
 		{
