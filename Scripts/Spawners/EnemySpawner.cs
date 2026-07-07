@@ -1,10 +1,12 @@
 using Godot;
+using Godot.Collections;
+using NeonSwarm.Resources;
 
 namespace NeonSwarm.Spawners;
 
 public partial class EnemySpawner : Node
 {
-	[Export] public PackedScene EnemyScene { get; set; }
+	[Export] public Array<EnemySpawnEntry> SpawnEntries { get; set; } = new();
 
 	[ExportGroup("Spawning")]
 	[Export] public float StartingSpawnRate { get; set; } = 0.5f; // Starting enemies spawned per second.
@@ -46,8 +48,8 @@ public partial class EnemySpawner : Node
 		if (_player == null)
 			GD.PushWarning($"{Name} could not find a Player node.");
 
-		if (EnemyScene == null)
-			GD.PushWarning($"{Name} has no EnemyScene assigned.");
+		if (SpawnEntries == null || SpawnEntries.Count == 0)
+			GD.PushWarning($"{Name} has no enemy spawn entries assigned.");
 		
 		if (DespawnDistanceFromPlayer <= SpawnDistanceFromPlayer)
 		{
@@ -78,7 +80,7 @@ public partial class EnemySpawner : Node
 			DespawnFarEnemies();
 		}
 
-		if (EnemyScene == null)
+		if (SpawnEntries == null || SpawnEntries.Count == 0)
 			return;
 		
 		float currentSpawnRate = GetCurrentSpawnRate();
@@ -96,7 +98,13 @@ public partial class EnemySpawner : Node
 
 		while (_spawnAccumulator >= 1f && aliveEnemyCount < currentMaxAliveEnemies)
 		{
-			SpawnEnemy();
+			if (!SpawnEnemy())
+			{
+				// No enemy type is currently available, so do not retain a spawn backlog.
+				_spawnAccumulator = 0f;
+				break;
+			}
+			
 			aliveEnemyCount++;
 			_spawnAccumulator -= 1f; // Subtract one spawn from the accumulator to allow for consistent spawning even if there are frame rate drops or a high spawn rate.
 		}
@@ -150,14 +158,67 @@ public partial class EnemySpawner : Node
 	}
 
 	// Spawns a single enemy at a random position around the player. The enemy is added to the specified container node and positioned at the calculated spawn position.
-	private void SpawnEnemy()
+	private bool SpawnEnemy()
 	{
-		Node2D enemyInstance = EnemyScene.Instantiate<Node2D>();
+		PackedScene enemyScene = ChooseEnemyScene();
+
+		if (enemyScene == null)
+			return false;
+		
+		Node2D enemyInstance = enemyScene.Instantiate<Node2D>();
 
 		Vector2 spawnPosition = GetSpawnPosition();
 		enemyInstance.Position = _enemyContainer.ToLocal(spawnPosition);
 
 		_enemyContainer.AddChild(enemyInstance);
+		return true;
+	}
+
+	// Picks an enemy to spawn using the spawn entries list
+	private PackedScene ChooseEnemyScene()
+	{
+		float totalWeight = 0f;
+
+		foreach (EnemySpawnEntry entry in SpawnEntries)
+		{
+			if (!IsSpawnEntryAvailable(entry))
+				continue;
+			
+			totalWeight += entry.Weight;
+		}
+
+		if (totalWeight <= 0f)
+			return null;
+		
+		float roll = _rng.RandfRange(0f, totalWeight);
+
+		foreach (EnemySpawnEntry entry in SpawnEntries)
+		{
+			if (!IsSpawnEntryAvailable(entry))
+				continue;
+			
+			roll -= entry.Weight;
+
+			if (roll <= 0f)
+				return entry.EnemyScene;
+		}
+
+		return null;
+	}
+
+	// Is the given enemy spawn entry valid for spawning at this time in the run.
+	private bool IsSpawnEntryAvailable(EnemySpawnEntry entry)
+	{
+		if (entry == null)
+			return false;
+
+		if (entry.EnemyScene == null)
+			return false;
+
+		if (entry.Weight <= 0f)
+			return false;
+
+		return _elapsedRunTime >= Mathf.Max(entry.MinimumElapsedTime, 0f);
 	}
 
 	// Calculates a random spawn position around the player at a specified distance.

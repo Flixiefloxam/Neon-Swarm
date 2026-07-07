@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://dxjcr3s3gsf4h"]
+
+[ext_resource type="PackedScene" uid="uid://b15n0s6304222" path="res://Scenes/Enemies/Chaser.tscn" id="1_plmds"]
+[ext_resource type="Script" uid="uid://b1cn8do7enfd2" path="res://Scripts/Resources/EnemySpawnEntry.cs" id="1_pvcdi"]
+
+[resource]
+script = ExtResource("1_pvcdi")
+EnemyScene = ExtResource("1_plmds")
+Weight = 9.0
+metadata/_custom_type_script = "uid://b1cn8do7enfd2"

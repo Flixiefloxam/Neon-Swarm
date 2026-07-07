@@ -8,7 +8,9 @@
 [ext_resource type="Script" uid="uid://7bglynkjf5dc" path="res://Scripts/Upgrades/UpgradeManager.cs" id="3_5s61s"]
 [ext_resource type="Resource" uid="uid://cjiaq5gxupjdb" path="res://Resources/Upgrades/Databases/DefaultUpgradeDatabase.tres" id="4_7npjy"]
 [ext_resource type="PackedScene" uid="uid://bvu8l5dwales2" path="res://Scenes/UI/Hud.tscn" id="6_w20t6"]
-[ext_resource type="PackedScene" uid="uid://btn8c21fjgheg" path="res://Scenes/Enemies/Brute.tscn" id="7_7npjy"]
+[ext_resource type="Script" uid="uid://b1cn8do7enfd2" path="res://Scripts/Resources/EnemySpawnEntry.cs" id="7_dvlhv"]
+[ext_resource type="Resource" uid="uid://dxjcr3s3gsf4h" path="res://Resources/Spawning/ChaserSpawnEntry.tres" id="8_wgovn"]
+[ext_resource type="Resource" uid="uid://cp8aupgdjfxgx" path="res://Resources/Spawning/BruteSpawnEntry.tres" id="9_cv8e0"]
 
 [sub_resource type="Environment" id="Environment_cmk6n"]
 background_mode = 3
@@ -42,8 +44,7 @@ script = ExtResource("2_o8wgc")
 [node name="EnemyContainer" type="Node2D" parent="." unique_id=238785141]
 
 [node name="EnemySpawner" parent="." unique_id=851304664 instance=ExtResource("2_cmk6n")]
-EnemyScene = ExtResource("7_7npjy")
-StartingSpawnRate = 30.0
+SpawnEntries = Array[ExtResource("7_dvlhv")]([ExtResource("8_wgovn"), ExtResource("9_cv8e0")])
 MaxSpawnRate = 30.0
 SpawnDistanceFromPlayer = 1000.0
 
