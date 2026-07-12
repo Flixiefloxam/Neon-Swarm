@@ -8,6 +8,7 @@ public partial class GlowVisual : Node2D
     [Export] public float GlowIntensity { get; set; } = 1.6f;
 
     private Sprite2D _body;
+    private Tween _flashTween; // Tracks the active hit-flash tween so repeated hits can restart the effect cleanly.
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -38,6 +39,37 @@ public partial class GlowVisual : Node2D
         UpdateVisuals();
     }
 
+    // Makes _body flash the provided colour, for the provided duration.
+    public void PlayFlash(Color flashColor, float duration = 0.08f)
+    {
+        if (_body == null)
+            return;
+        
+        _flashTween?.Kill(); // Resets the tween if it was already resetting a previous flash.
+
+        Color normalColor = GetDisplayColor();
+
+        _body.SelfModulate = flashColor;
+
+        _flashTween = CreateTween();
+        _flashTween.TweenProperty(
+            _body,
+            "self_modulate",
+            normalColor,
+            Mathf.Max(duration, 0.01f)
+        );
+    }
+
+    private Color GetDisplayColor()
+    {
+        return new Color(
+            BodyColor.R * GlowIntensity,
+            BodyColor.G * GlowIntensity,
+            BodyColor.B * GlowIntensity,
+            BodyColor.A
+        );
+    }
+
     // Updates the visuals based on the current BodyColor and GlowIntensity properties.
     private void UpdateVisuals()
     {
@@ -47,11 +79,6 @@ public partial class GlowVisual : Node2D
             return;
         }
 
-        _body.SelfModulate = new Color(
-            BodyColor.R * GlowIntensity,
-            BodyColor.G * GlowIntensity,
-            BodyColor.B * GlowIntensity,
-            BodyColor.A
-        );
+        _body.SelfModulate = GetDisplayColor();
     }
 }
