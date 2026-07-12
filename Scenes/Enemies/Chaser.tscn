@@ -29,6 +29,7 @@ disabled = true
 
 [node name="HealthComponent" type="Node" parent="." unique_id=199467647]
 script = ExtResource("3_d13j5")
+HitFlashDuration = 0.24
 
 [node name="Visuals" type="Node2D" parent="." unique_id=923753387]
 script = ExtResource("3_jgp3i")
