@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://u7wkv3im8nwi"]
+
+[ext_resource type="Script" uid="uid://3u1iutl55brn" path="res://Scripts/Vfx/OneShotParticlesVfx.cs" id="1_gxvhy"]
+[ext_resource type="Texture2D" uid="uid://b32a7uribn5is" path="res://Art/Vfx/WhiteSquare.png" id="2_i51lb"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_i51lb"]
+lifetime_randomness = 0.8
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 70.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
+damping_min = 100.00001
+damping_max = 100.00001
+scale_min = 0.75
+scale_max = 2.0
+
+[node name="ParticleBurst" type="Node2D" unique_id=94630237]
+script = ExtResource("1_gxvhy")
+
+[node name="Particles" type="GPUParticles2D" parent="." unique_id=1405752676]
+texture_filter = 1
+emitting = false
+amount = 14
+texture = ExtResource("2_i51lb")
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_i51lb")

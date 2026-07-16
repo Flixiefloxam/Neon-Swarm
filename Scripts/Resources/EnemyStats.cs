@@ -46,4 +46,5 @@ public partial class EnemyStats : Resource
     [ExportGroup("Visual")]
     [Export] public Color BodyColor { get; set; } = Colors.Red; // The color of the enemy's body and glow.
     [Export] public float GlowIntensity { get; set; } = 1.3f; // The intensity of the enemy's glow visual effect.
+    [Export] public PackedScene DeathVfxScene { get; set; } // The scene spawned on the enmies death. Used to spawn particle effects on death.
 }

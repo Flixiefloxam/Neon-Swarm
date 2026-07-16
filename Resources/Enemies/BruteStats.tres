@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="EnemyStats" format=3 uid="uid://dffwx3mhe0qoe"]
 
+[ext_resource type="PackedScene" uid="uid://u7wkv3im8nwi" path="res://Scenes/Vfx/ParticleBurst.tscn" id="1_fdf2b"]
 [ext_resource type="PackedScene" uid="uid://b3dsp4iub64pi" path="res://Scenes/Pickups/XpGem.tscn" id="1_rb8ri"]
 [ext_resource type="Script" uid="uid://cf26205gw6f1s" path="res://Scripts/Resources/EnemyStats.cs" id="2_fdf2b"]
 
@@ -23,4 +24,5 @@ KnockbackResistance = 2.5
 KnockbackDamping = 650.0
 BodyColor = Color(1, 0.7019608, 0.24705882, 1)
 GlowIntensity = 1.4
+DeathVfxScene = ExtResource("1_fdf2b")
 metadata/_custom_type_script = "uid://cf26205gw6f1s"

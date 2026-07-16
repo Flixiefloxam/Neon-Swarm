@@ -53,3 +53,6 @@ SpawnDistanceFromPlayer = 1000.0
 z_index = 4
 
 [node name="Hud" parent="." unique_id=876886334 instance=ExtResource("6_w20t6")]
+
+[node name="VfxContainer" type="Node2D" parent="." unique_id=1530275925]
+z_index = 5

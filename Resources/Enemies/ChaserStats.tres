@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b3dsp4iub64pi" path="res://Scenes/Pickups/XpGem.tscn" id="1_0qn70"]
 [ext_resource type="Script" uid="uid://cf26205gw6f1s" path="res://Scripts/Resources/EnemyStats.cs" id="1_1q45s"]
+[ext_resource type="PackedScene" uid="uid://u7wkv3im8nwi" path="res://Scenes/Vfx/ParticleBurst.tscn" id="1_6xhpp"]
 
 [resource]
 script = ExtResource("1_1q45s")
@@ -9,4 +10,5 @@ EnemyName = "Chaser"
 ExperiencePickupScene = ExtResource("1_0qn70")
 MoveSpeed = 150.0
 BodyColor = Color(1, 0.2, 0.2784314, 1)
+DeathVfxScene = ExtResource("1_6xhpp")
 metadata/_custom_type_script = "uid://cf26205gw6f1s"

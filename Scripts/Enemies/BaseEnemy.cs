@@ -3,6 +3,7 @@ using NeonSwarm.Components;
 using NeonSwarm.Resources;
 using NeonSwarm.Visuals;
 using NeonSwarm.Pickups;
+using NeonSwarm.Vfx;
 
 namespace NeonSwarm.Enemies;
 
@@ -220,6 +221,42 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 		);
 	}
 
+	private void SpawnDeathVfx()
+	{
+		if (Stats?.DeathVfxScene == null)
+			return;
+		
+		if (Stats.DeathVfxScene.Instantiate() is not OneShotParticlesVfx deathVfx)
+		{
+			GD.PushWarning(
+				$"{Name}'s DeathVfxScene is not a OneShotParticlesVfx."
+			);
+			return;
+		}
+
+		Node2D vfxContainer = GetVfxContainer();
+
+		if (vfxContainer == null)
+		{
+			GD.PushWarning($"{Name} could not find a VfxContainer.");
+			deathVfx.QueueFree();
+			return;
+		}
+
+		deathVfx.Initialize(Stats.BodyColor); // run before addchild because addchild triggers _Ready.
+		deathVfx.Scale = Vector2.One * Mathf.Max(Stats.VisualScale, 0.01f); // Scales death vfx to enemy size.
+
+		deathVfx.Position = vfxContainer.ToLocal(GlobalPosition); // Set pos before spawning so it's not in the wrong place for a frame.
+		vfxContainer.AddChild(deathVfx);
+	}
+
+	private Node2D GetVfxContainer()
+	{
+		Node currentScene = GetTree().CurrentScene;
+
+		return currentScene?.GetNodeOrNull<Node2D>("VfxContainer");
+	}
+
 	// Drops an experience gem using this enemy's XP value.
 	private void DropExperience()
 	{
@@ -270,6 +307,7 @@ public partial class BaseEnemy : CharacterBody2D, IKnockbackReceiver
 	// Runs when the enemy dies
 	protected virtual void Die()
 	{
+		SpawnDeathVfx();
 		DropExperience();
 		QueueFree();
 	}
