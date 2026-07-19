@@ -112,7 +112,9 @@ public abstract partial class BaseWeapon : Node2D
 			HitsUntilDestroyed = RuntimeStats.HitsUntilDestroyed,
 			TargetFactions = RuntimeStats.TargetFactions,
 
-			KnockbackStrength = RuntimeStats.KnockbackStrength
+			KnockbackStrength = RuntimeStats.KnockbackStrength,
+
+			ImpactVfxScene = RuntimeStats.ImpactVfxScene
 		};
 	}
 

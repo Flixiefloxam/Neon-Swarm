@@ -33,4 +33,8 @@ public partial class WeaponStats : Resource
 	// ==================== Knockback ====================
 	[ExportGroup("Knockback")]
 	[Export] public float KnockbackStrength { get; set; } = 350f;
+
+	// ==================== Visual ====================
+	[ExportGroup("Visual")]
+	[Export] public PackedScene ImpactVfxScene { get; set; }
 }

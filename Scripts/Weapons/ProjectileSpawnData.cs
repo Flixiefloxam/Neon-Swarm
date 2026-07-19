@@ -15,4 +15,5 @@ public struct ProjectileSpawnData
 	public int HitsUntilDestroyed;
 	public DamageFaction TargetFactions;
 	public float KnockbackStrength;
+	public PackedScene ImpactVfxScene;
 }

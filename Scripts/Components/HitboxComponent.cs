@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 namespace NeonSwarm.Components;
@@ -23,9 +24,11 @@ public partial class HitboxComponent : Area2D
     [Export] public NodePath KnockbackOriginPath { get; set; } = ".."; // The origin point used when calculating knockback direction.
 
     public Vector2 KnockbackDirectionOverride { get; set; } = Vector2.Zero; // This is used as the knockback direction unless it's zero. Used by projectiles for more natural knockback.
+    public event Action<HurtboxComponent> HitLanded; // Raised when this hitbox passes its faction and cooldown checks and hits a hurtbox.
 
     private readonly Dictionary<ulong, float> _cooldowns = new();
     private int _hitsTaken = 0;
+    private bool _isDepleted;
 
     public override void _Ready()
     {
@@ -69,6 +72,9 @@ public partial class HitboxComponent : Area2D
 
     private bool TryDamage(Area2D area)
     {
+        if (_isDepleted)
+            return false;
+        
         if (area is not HurtboxComponent hurtbox)
             return false;
             
@@ -85,8 +91,13 @@ public partial class HitboxComponent : Area2D
 
         _cooldowns[hurtboxId] = DamageCooldown;
 
+        HitLanded?.Invoke(hurtbox);
+
         if (HitsUntilDestroyed > 0 && ++_hitsTaken >= HitsUntilDestroyed)
+        {
+            _isDepleted = true;
             DestroyOwner();
+        }
 
         return true;
     }

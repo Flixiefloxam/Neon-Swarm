@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="WeaponStats" format=3 uid="uid://cerluiemu1pp7"]
 
 [ext_resource type="PackedScene" uid="uid://bpht8jkcbeev6" path="res://Scenes/Weapons/Projectile.tscn" id="1_11klw"]
+[ext_resource type="PackedScene" uid="uid://btbbgqwygm2g1" path="res://Scenes/Vfx/ProjectileImpactBurst.tscn" id="1_dni7r"]
 [ext_resource type="Script" uid="uid://cwonbsli5nx13" path="res://Scripts/Resources/WeaponStats.cs" id="1_rdlnn"]
 
 [resource]
@@ -8,4 +9,5 @@ script = ExtResource("1_rdlnn")
 WeaponId = "basic_gun"
 WeaponName = "Pistol"
 ProjectileScene = ExtResource("1_11klw")
+ImpactVfxScene = ExtResource("1_dni7r")
 metadata/_custom_type_script = "uid://cwonbsli5nx13"
