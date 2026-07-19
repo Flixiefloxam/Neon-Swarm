@@ -1,5 +1,6 @@
 using Godot;
 using NeonSwarm.Components;
+using NeonSwarm.Player;
 
 namespace NeonSwarm.Pickups;
 
@@ -8,6 +9,7 @@ public partial class XpGem : Node2D
 	[Export] public float ExperienceAmount { get; set; } = 1f; // How much experience is awarded when the gem is picked up.
 
 	[Export] public float CollectionRadius { get; set; } = 16f; // Distance from the player at which the gem is collected.
+	[Export] public float AttractionSpeed { get; set; } = 500f;
 
 	[ExportGroup("Visuals")]
 	[Export] public Color BodyColor { get; set; } = new(0.8f, 0f, 1f, 1f);
@@ -16,7 +18,7 @@ public partial class XpGem : Node2D
 	[Export] public float PulseSpeed { get; set; } = 4f;
 	[Export] public float PulseAmount { get; set; } = 0.08f;
 
-	private Node2D _player;
+	private PlayerController _player;
 	private ExperienceComponent _experienceComponent;
 	private Polygon2D _body;
 
@@ -55,8 +57,30 @@ public partial class XpGem : Node2D
 		if (_player == null || _experienceComponent == null)
 			return;
 		
+		CollectionRadius = Mathf.Max(0f, CollectionRadius);
 		float collectionRadiusSquared = CollectionRadius * CollectionRadius;
+
 		float distanceSquared = GlobalPosition.DistanceSquaredTo(_player.GlobalPosition);
+
+		if (distanceSquared <= collectionRadiusSquared)
+		{
+			Collect();
+			return;
+		}
+
+		float attractionRadius = Mathf.Max(0f, _player.PickupAttractionRadius);
+
+		float attractionRadiusSquared = attractionRadius * attractionRadius;
+
+		if (distanceSquared > attractionRadiusSquared)
+			return;
+		
+		float movementDistance = Mathf.Max(0f, AttractionSpeed) * (float)delta;
+
+		GlobalPosition = GlobalPosition.MoveToward(_player.GlobalPosition, movementDistance);
+
+		// Check if gem should be collected again os it's collected immediatly when reaching the collection radius.
+		distanceSquared = GlobalPosition.DistanceSquaredTo(_player.GlobalPosition);
 
 		if (distanceSquared <= collectionRadiusSquared)
 			Collect();
@@ -64,7 +88,7 @@ public partial class XpGem : Node2D
 
 	private void FindPlayer()
 	{
-		_player = GetTree().GetFirstNodeInGroup("Player") as Node2D;
+		_player = GetTree().GetFirstNodeInGroup("Player") as PlayerController;
 
 		if (_player == null)
 			return;

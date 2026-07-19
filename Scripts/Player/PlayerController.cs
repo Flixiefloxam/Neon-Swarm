@@ -4,8 +4,12 @@ namespace NeonSwarm.Player;
 
 public partial class PlayerController : CharacterBody2D
 {
+	[ExportGroup("Movement")]
 	[Export] public float MoveSpeed = 300.0f;
 	[Export] public float BodyRadius { get; set; } = 12f; // The radius used by EnemyCrowdManager when pushing enemies away from the player.
+
+	[ExportGroup("Pickups")]
+	[Export] public float PickupAttractionRadius { get; set; } = 140f;
 
 	private Vector2 _moveDirection = Vector2.Zero;
 
