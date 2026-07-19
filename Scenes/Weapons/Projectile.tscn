@@ -14,7 +14,7 @@ script = ExtResource("1_ytq58")
 script = ExtResource("2_0bwby")
 TargetFactions = 2
 HitsUntilDestroyed = 1
-KnockbackStrength = 350.0
+KnockbackStrength = 150.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1194112722]
 shape = SubResource("CircleShape2D_m6xnb")
