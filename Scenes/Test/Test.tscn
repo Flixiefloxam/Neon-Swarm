@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://cw7780ldpi4cn"]
+
+[ext_resource type="PackedScene" uid="uid://cc4kkhj3k6cfb" path="res://Scenes/Environment/GridBackground.tscn" id="1_fmwki"]
+[ext_resource type="Script" uid="uid://dmww07t8mp1q6" path="res://Scripts/Core/GameManager.cs" id="2_1eoph"]
+[ext_resource type="Script" uid="uid://7bglynkjf5dc" path="res://Scripts/Upgrades/UpgradeManager.cs" id="3_j420x"]
+[ext_resource type="Resource" uid="uid://cjiaq5gxupjdb" path="res://Resources/Upgrades/Databases/DefaultUpgradeDatabase.tres" id="4_sxdlq"]
+[ext_resource type="Script" uid="uid://d0xh7lb2781c2" path="res://Scripts/Enemies/EnemyCrowdManager.cs" id="5_bdon2"]
+[ext_resource type="PackedScene" uid="uid://b15n0s6304222" path="res://Scenes/Enemies/Chaser.tscn" id="6_qkd4f"]
+[ext_resource type="PackedScene" uid="uid://bpht8jkcbeev6" path="res://Scenes/Weapons/Projectile.tscn" id="6_s2usq"]
+[ext_resource type="PackedScene" uid="uid://btn8c21fjgheg" path="res://Scenes/Enemies/Brute.tscn" id="8_whbja"]
+[ext_resource type="PackedScene" uid="uid://dopdv3r8sqkey" path="res://Scenes/Player/Player.tscn" id="10_vpls7"]
+[ext_resource type="PackedScene" uid="uid://bvu8l5dwales2" path="res://Scenes/UI/Hud.tscn" id="11_kged7"]
+
+[sub_resource type="Environment" id="Environment_cmk6n"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 0.6
+glow_strength = 0.9
+glow_hdr_threshold = 0.7
+
+[node name="Main" type="Node2D" unique_id=975442978]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=300987375]
+environment = SubResource("Environment_cmk6n")
+
+[node name="GridBackground" parent="." unique_id=229738081 instance=ExtResource("1_fmwki")]
+
+[node name="GameManager" type="Node" parent="." unique_id=45834742]
+script = ExtResource("2_1eoph")
+EnemySpawnerPath = NodePath("")
+ClearProjectilesOnGameOver = false
+
+[node name="UpgradeManager" type="Node" parent="." unique_id=567705447]
+script = ExtResource("3_j420x")
+Database = ExtResource("4_sxdlq")
+
+[node name="EnemyCrowdManager" type="Node2D" parent="." unique_id=927347719]
+script = ExtResource("5_bdon2")
+
+[node name="PickupContainer" type="Node2D" parent="." unique_id=16734559]
+
+[node name="ProjectileContainer" type="Node2D" parent="." unique_id=182134154]
+z_index = 3
+
+[node name="Projectile" parent="ProjectileContainer" unique_id=1312199632 instance=ExtResource("6_s2usq")]
+position = Vector2(79, -50)
+
+[node name="Projectile2" parent="ProjectileContainer" unique_id=1702701141 instance=ExtResource("6_s2usq")]
+position = Vector2(78, 54)
+
+[node name="EnemyContainer" type="Node2D" parent="." unique_id=238785141]
+
+[node name="Chaser" parent="EnemyContainer" unique_id=1393047655 instance=ExtResource("6_qkd4f")]
+position = Vector2(331, -91)
+
+[node name="Chaser2" parent="EnemyContainer" unique_id=1379465018 instance=ExtResource("6_qkd4f")]
+position = Vector2(161, -179)
+
+[node name="Chaser3" parent="EnemyContainer" unique_id=113513030 instance=ExtResource("6_qkd4f")]
+position = Vector2(290, -253)
+
+[node name="Chaser4" parent="EnemyContainer" unique_id=1639808556 instance=ExtResource("6_qkd4f")]
+position = Vector2(277, 6)
+
+[node name="Chaser5" parent="EnemyContainer" unique_id=1079333070 instance=ExtResource("6_qkd4f")]
+position = Vector2(385, 164)
+
+[node name="Chaser6" parent="EnemyContainer" unique_id=114183017 instance=ExtResource("6_qkd4f")]
+position = Vector2(235, 151)
+
+[node name="Brute" parent="EnemyContainer" unique_id=2110208288 instance=ExtResource("8_whbja")]
+position = Vector2(326, 78)
+
+[node name="Brute2" parent="EnemyContainer" unique_id=1676983661 instance=ExtResource("8_whbja")]
+position = Vector2(220, -120)
+
+[node name="Player" parent="." unique_id=168775628 instance=ExtResource("10_vpls7")]
+z_index = 4
+
+[node name="Hud" parent="." unique_id=876886334 instance=ExtResource("11_kged7")]
+
+[node name="VfxContainer" type="Node2D" parent="." unique_id=1530275925]
+z_index = 5
