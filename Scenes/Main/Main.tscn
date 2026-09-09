@@ -46,6 +46,7 @@ z_index = 3
 
 [node name="EnemySpawner" parent="." unique_id=851304664 instance=ExtResource("2_cmk6n")]
 SpawnEntries = Array[ExtResource("7_dvlhv")]([ExtResource("8_wgovn"), ExtResource("9_cv8e0")])
+SpawnRateIncreasePerMinute = 0.6
 MaxSpawnRate = 30.0
 SpawnDistanceFromPlayer = 1000.0
 
