@@ -2,6 +2,7 @@ namespace NeonSwarm.Upgrades;
 
 public enum UpgradeOperation
 {
-	Add,
-	Multiply
+	AddFlat,
+	AddPercentOfBase,
+	MultiplyTotal
 }

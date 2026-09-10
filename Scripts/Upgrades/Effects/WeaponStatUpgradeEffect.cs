@@ -12,7 +12,7 @@ public partial class WeaponStatUpgradeEffect : BaseUpgradeEffect
 
 	[ExportGroup("Stat Change")]
 	[Export] public WeaponStatType Stat { get; set; } = WeaponStatType.Damage; // The stat the upgrade modifies
-	[Export] public UpgradeOperation Operation { get; set; } = UpgradeOperation.Add; // The operation applied to the modified stat
+	[Export] public UpgradeOperation Operation { get; set; } = UpgradeOperation.AddFlat; // The operation applied to the modified stat
 	[Export] public float Value { get; set; } = 1f;
 
     // Returns whether this effect can currently be applied.
@@ -37,39 +37,42 @@ public partial class WeaponStatUpgradeEffect : BaseUpgradeEffect
 			return;
         }
 
-        ApplyToStats(weapon.RuntimeStats);
+        ApplyToStats(weapon);
     }
 
-    private void ApplyToStats(WeaponStats stats)
+    private void ApplyToStats(BaseWeapon weapon)
     {
+        WeaponStats runtimeStats = weapon.RuntimeStats;
+        WeaponStats baseStats = weapon.BaseStats ?? runtimeStats;
+
         switch (Stat)
         {
             case WeaponStatType.Damage:
-				stats.Damage = Mathf.Max(0f, ApplyOperation(stats.Damage));
+				runtimeStats.Damage = Mathf.Max(0f, ApplyOperation(runtimeStats.Damage, baseStats.Damage));
 				break;
 
 			case WeaponStatType.FireRate:
-				stats.FireRate = Mathf.Max(0.01f, ApplyOperation(stats.FireRate));
+				runtimeStats.FireRate = Mathf.Max(0.01f, ApplyOperation(runtimeStats.FireRate, baseStats.FireRate));
 				break;
 
 			case WeaponStatType.ProjectileSpeed:
-				stats.ProjectileSpeed = Mathf.Max(0f, ApplyOperation(stats.ProjectileSpeed));
+				runtimeStats.ProjectileSpeed = Mathf.Max(0f, ApplyOperation(runtimeStats.ProjectileSpeed, baseStats.ProjectileSpeed));
 				break;
 
 			case WeaponStatType.ProjectileLifetime:
-				stats.ProjectileLifetime = Mathf.Max(0.05f, ApplyOperation(stats.ProjectileLifetime));
+				runtimeStats.ProjectileLifetime = Mathf.Max(0.05f, ApplyOperation(runtimeStats.ProjectileLifetime, baseStats.ProjectileLifetime));
 				break;
 
 			case WeaponStatType.DamageCooldown:
-				stats.DamageCooldown = Mathf.Max(0f, ApplyOperation(stats.DamageCooldown));
+				runtimeStats.DamageCooldown = Mathf.Max(0f, ApplyOperation(runtimeStats.DamageCooldown, baseStats.DamageCooldown));
 				break;
 
 			case WeaponStatType.KnockbackStrength:
-				stats.KnockbackStrength = Mathf.Max(0f, ApplyOperation(stats.KnockbackStrength));
+				runtimeStats.KnockbackStrength = Mathf.Max(0f, ApplyOperation(runtimeStats.KnockbackStrength, baseStats.KnockbackStrength));
 				break;
 
 			case WeaponStatType.ProjectileSpawnOffset:
-				stats.ProjectileSpawnOffset = Mathf.Max(0f, ApplyOperation(stats.ProjectileSpawnOffset));
+				runtimeStats.ProjectileSpawnOffset = Mathf.Max(0f, ApplyOperation(runtimeStats.ProjectileSpawnOffset, baseStats.ProjectileSpawnOffset));
 				break;
             
             default:
@@ -78,12 +81,13 @@ public partial class WeaponStatUpgradeEffect : BaseUpgradeEffect
         }
     }
 
-    private float ApplyOperation(float currentValue)
+    private float ApplyOperation(float currentValue, float baseValue)
     {
         return Operation switch
         {
-            UpgradeOperation.Add => currentValue + Value,
-            UpgradeOperation.Multiply => currentValue * Value,
+            UpgradeOperation.AddFlat => currentValue + Value,
+            UpgradeOperation.AddPercentOfBase => currentValue + (baseValue * Value),
+            UpgradeOperation.MultiplyTotal => currentValue * Value,
             _ => currentValue
         };
     }

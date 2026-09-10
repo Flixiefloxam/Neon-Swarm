@@ -8,7 +8,7 @@
 script = ExtResource("2_8en61")
 Stat = 1
 Operation = 1
-Value = 1.1
+Value = 0.1
 metadata/_custom_type_script = "uid://dyqpp0o5wymko"
 
 [resource]

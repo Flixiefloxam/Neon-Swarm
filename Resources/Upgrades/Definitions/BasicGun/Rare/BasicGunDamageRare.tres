@@ -6,14 +6,15 @@
 
 [sub_resource type="Resource" id="Resource_etb7j"]
 script = ExtResource("2_enlph")
-Value = 4.0
+Operation = 1
+Value = 0.5
 metadata/_custom_type_script = "uid://dyqpp0o5wymko"
 
 [resource]
 script = ExtResource("3_ojj15")
 UpgradeId = "basic_gun_damage_rare"
 DisplayName = "Neon Overload"
-Description = "Pistol damage +4"
+Description = "Pistol damage +50%"
 Rarity = 2
 MaxStacks = 2
 Effects = Array[ExtResource("1_7g8mn")]([SubResource("Resource_etb7j")])
