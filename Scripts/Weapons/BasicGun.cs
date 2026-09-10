@@ -33,7 +33,7 @@ public partial class BasicGun : BaseWeapon
 		return SpawnProjectile(spawnPosition, projectileData) != null;
 	}
 
-	// Finds nearest enemy in the scene. Returns null if there are no enemies.
+	// Finds nearest on screen enemy. Returns null if there are no enemies.
 	private Node2D FindNearestEnemy()
 	{
 		Godot.Collections.Array<Node> enemies = GetTree().GetNodesInGroup("Enemies");
@@ -49,6 +49,9 @@ public partial class BasicGun : BaseWeapon
 			if (enemy.IsQueuedForDeletion())
 				continue;
 			
+			if (!IsOnScreen(enemy))
+				continue;
+			
 			float distanceSquared = GlobalPosition.DistanceSquaredTo(enemy.GlobalPosition);
 
 			if (distanceSquared < nearestDistanceSquared)
@@ -59,5 +62,13 @@ public partial class BasicGun : BaseWeapon
 		}
 
 		return nearestEnemy;
+	}
+
+	// Checks to see if the given Node2D is on the screen right now. Used to make sure an enemy is visible before targeting it.
+	private bool IsOnScreen(Node2D enemy)
+	{
+		Vector2 viewportPosition = enemy.GetGlobalTransformWithCanvas().Origin;
+
+		return GetViewportRect().HasPoint(viewportPosition);
 	}
 }
