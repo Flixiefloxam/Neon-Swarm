@@ -6,5 +6,5 @@
 [resource]
 script = ExtResource("1_ikp4n")
 EnemyScene = ExtResource("1_xti1b")
-MinimumElapsedTime = 60.0
+MinimumElapsedTime = 90.0
 metadata/_custom_type_script = "uid://b1cn8do7enfd2"
