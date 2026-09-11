@@ -4,15 +4,17 @@ namespace NeonSwarm.Weapons;
 
 public partial class BasicGun : BaseWeapon
 {
-    // Attempts to shoot at the nearest enemy
+	public Node2D CurrentTarget { get; private set; } // The enemy that's currently being targetted. Used so the player's eyes can look at the currently targetted enemy.
+
+    // Attempts to shoot at the nearest enemy.
     protected override bool TryFire()
 	{
-		Node2D target = FindNearestEnemy();
+		CurrentTarget = FindNearestEnemy();
 
-		if (target == null)
+		if (CurrentTarget == null)
 			return false;
 		
-		return ShootAt(target);
+		return ShootAt(CurrentTarget);
 	}
 
 	private bool ShootAt(Node2D target)
