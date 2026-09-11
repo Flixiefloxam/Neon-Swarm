@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://7bblql7uwacx" path="res://Art/Sprites/Circle.png" id="1_g6ral"]
 [ext_resource type="Script" uid="uid://cuxiaixmbj0be" path="res://Scripts/Weapons/Projectile.cs" id="1_ytq58"]
 [ext_resource type="Script" uid="uid://dsn58dbdddxxv" path="res://Scripts/Components/HitboxComponent.cs" id="2_0bwby"]
-[ext_resource type="Texture2D" uid="uid://cjkv5tcqphndc" path="res://Art/Sprites/Square.png" id="3_0bwby"]
+[ext_resource type="Texture2D" uid="uid://b32a7uribn5is" path="res://Art/Vfx/WhiteSquare.png" id="2_se47w"]
 
 [sub_resource type="Gradient" id="Gradient_se47w"]
 colors = PackedColorArray(1, 1, 1, 0.70000005, 1, 1, 1, 0)
@@ -21,8 +21,8 @@ initial_velocity_max = 100.0
 gravity = Vector3(0, 0, 0)
 damping_min = 50.000004
 damping_max = 100.00001
-scale_min = 0.099999994
-scale_max = 0.14999999
+scale_min = 0.79999995
+scale_max = 1.1999999
 color_ramp = SubResource("GradientTexture1D_se47w")
 
 [sub_resource type="Curve" id="Curve_0bwby"]
@@ -46,7 +46,7 @@ script = ExtResource("1_ytq58")
 self_modulate = Color(1.572, 1.493, 0.362, 1)
 position = Vector2(-7.5, 0)
 amount = 4
-texture = ExtResource("3_0bwby")
+texture = ExtResource("2_se47w")
 lifetime = 0.18000000000000002
 randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_se47w")
