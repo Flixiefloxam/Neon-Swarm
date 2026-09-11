@@ -9,6 +9,6 @@ script = ExtResource("1_1q45s")
 EnemyName = "Chaser"
 ExperiencePickupScene = ExtResource("1_0qn70")
 MoveSpeed = 80.0
-BodyColor = Color(1, 0.2, 0.2784314, 1)
+BodyColor = Color(1, 0, 0.2784093, 1)
 DeathVfxScene = ExtResource("1_6xhpp")
 metadata/_custom_type_script = "uid://cf26205gw6f1s"
