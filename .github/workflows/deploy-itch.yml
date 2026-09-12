@@ -39,7 +39,7 @@ jobs:
         run: dotnet restore
 
       - name: Build C# project
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration ExportRelease --no-restore
 
       - name: Create build directory
         run: mkdir -p build/windows
