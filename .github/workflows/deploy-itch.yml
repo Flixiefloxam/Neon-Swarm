@@ -1,0 +1,62 @@
+name: Deploy Neon Swarm to itch.io
+
+on:
+  push:
+    branches:
+      - release
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: "4.7.0"
+          use-dotnet: true
+          include-templates: true
+
+      - name: Verify tools
+        run: |
+          dotnet --version
+          godot --version
+
+      - name: Restore C# dependencies
+        run: dotnet restore
+
+      - name: Build C# project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Create build directory
+        run: mkdir -p build/windows
+
+      - name: Export Windows build
+        run: >
+          godot
+          --headless
+          --path .
+          --export-release
+          "Windows Desktop"
+          build/windows/NeonSwarm.exe
+
+      - name: Setup Butler
+        uses: remarkablegames/setup-butler@v3
+
+      - name: Upload to itch.io
+        run: butler push build/windows flixiefloxam/neon-swarm:windows
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}

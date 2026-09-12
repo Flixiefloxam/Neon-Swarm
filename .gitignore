@@ -26,3 +26,6 @@ obj/
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Automated/local exported builds
+build/
