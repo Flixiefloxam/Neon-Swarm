@@ -107,6 +107,9 @@ public partial class PlayerVisualController : Node
 		UpdateVisualLag(deltaFloat);
 	}
 
+	// This runs every frame and causes the player's visual to trail behind the player's actual position.
+	// This gives the impression of inertia without actually affecting the player's responsiveness when weaving through a crowd.
+	// This has the added effect of making the player's visual deformation look like it's only stretching away from the direction of movement.
 	private void UpdateVisualLag(float delta)
 	{
 		if (_visuals == null || _playerController == null)
@@ -135,6 +138,9 @@ public partial class PlayerVisualController : Node
 		_visuals.Position = _visuals.Position.Lerp(targetPosition, weight);
 	}
 
+	// This runs every frame and causes the player's visuals to stretch in the direction of travel while also squashing perpendicular to it (to roughly maintain player visual size).
+	// This deformation will happen gradually. The deformation of the visuals will rotate towards new directions of travel gradually aswell.
+	// This deformation only applies to the visuals and does not affect the player's hurtbox or crowd size (the size they are treated as for crowd interations).
 	private void UpdateDeformVisuals(float delta)
 	{
 		if (VisualDeformTransform == null || _playerController == null || _body == null)
@@ -163,6 +169,9 @@ public partial class PlayerVisualController : Node
 		VisualDeformTransform.Scale = VisualDeformTransform.Scale.Lerp(targetScale, scaleWeight);
 	}
 
+	// This runs every frame and causes the player's eyes to look toward the target the player's currently shooting at.
+	// When an enemy dies they will continue looking toward where the enemy was before it died, until they recieves a new target or they reset back to their default position.
+	// When the eye's don't recieve a new target to look at for long enough, they reset back to their default position.
 	private void UpdateEyeVisuals(float delta)
 	{
 		if (Eyes == null || _basicGun == null)
