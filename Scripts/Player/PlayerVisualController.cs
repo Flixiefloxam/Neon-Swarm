@@ -1,3 +1,4 @@
+using System;
 using System.Runtime;
 using Godot;
 using NeonSwarm.Weapons;
@@ -7,10 +8,11 @@ namespace NeonSwarm.Player;
 public partial class PlayerVisualController : Node
 {
 	[ExportGroup("Eyes")]
+	[Export] public Node2D Eyes { get; set; } // The parent node that holds both eyes. This node will get moved towards the enemy being shot at.
+
 	[Export] public float MaxEyeOffset { get; set; } = 2f; // How far from their neutral position the eyes can move when looking at something.
 	[Export] public float EyeMoveSpeed { get; set; } = 12f; // How fast the eyes will move towards a new position when looking.
 	[Export] public float ReturnDelay { get; set; } = 1f; // How long the eyes need to be without a target.
-	[Export] public Node2D Eyes { get; set; } // The parent node that holds both eyes. This node will get moved towards the enemy being shot at.
 
 	[ExportGroup("Movement")]
 	[Export] public Node2D VisualDeformTransform { get; set; } // The node that's deformed for player visual deformation.
@@ -18,7 +20,9 @@ public partial class PlayerVisualController : Node
 	[Export] public float StretchAmount { get; set; } = 0.06f; // How much the player's sprite gets deformed along the axis of movement.
 	[Export] public float SquashAmount { get; set; } = 0.04f; // How much the player's sprite gets deformed perpendicular to the axis of movement.
 	[Export] public float DeformResponsiveness { get; set; } = 12f; // How quickly the player's sprite squashes/stretches and returns to normal.
-	[Export] public float DeformRotationResponsiveness { get; set; } = 10f;
+	[Export] public float DeformRotationResponsiveness { get; set; } = 10f; // How quickly the player's deformation will rotate to face a new movement direction.
+	[Export] public float MaxVisualLag { get; set; } = 2.5f; // Maximum distance the player's sprite can trail behind the player's actual position.
+	[Export] public float VisualLagResponsiveness { get; set; } = 10f; // How quickly the player's sprite move toward the target lag position.
 
 	private BasicGun _basicGun; // The players eyes look towards the current target of BasicGun.
 	private Vector2 _restingEyesPosition; // Where the eyes are in their resting position.
@@ -28,7 +32,9 @@ public partial class PlayerVisualController : Node
 	private float _restingDeformRotation; // The starting rotation of the VisualDeformTransform node.
 	private float _restingVisualRotation; // The starting rotation of the _visuals node.
 	private PlayerController _playerController;
-	private Node2D _visuals; // The node containing player visuals. Needs to be the child of VisualDeformTransform.
+	private Node2D _body; // The node containing player visuals. Needs to be the child of VisualDeformTransform.
+	private Node2D _visuals; // The root node of all the player visuals
+	private Vector2 _restingVisualPosition; // The starting position of the _visuals node.
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -57,14 +63,14 @@ public partial class PlayerVisualController : Node
 			_restingDeformRotation = VisualDeformTransform.Rotation;
 		}
 
-		_visuals = VisualDeformTransform.GetNodeOrNull<Node2D>("Body");
-		if (_visuals == null)
+		_body = VisualDeformTransform.GetNodeOrNull<Node2D>("Body");
+		if (_body == null)
 		{
-			GD.PushError($"{Name} could not find Visuals node.");
+			GD.PushError($"{Name} could not find Body node.");
 		}
 		else
 		{
-			_restingVisualRotation = _visuals.Rotation;
+			_restingVisualRotation = _body.Rotation;
 		}
 
 		if (Eyes == null)
@@ -74,7 +80,20 @@ public partial class PlayerVisualController : Node
 			);
 			return;
 		}
-		_restingEyesPosition = Eyes.Position;
+		else
+		{
+			_restingEyesPosition = Eyes.Position;
+		}
+
+		_visuals = GetNodeOrNull<Node2D>("../Visuals");
+		if (_visuals == null)
+		{
+			GD.PushError($"{Name} could not find Visuals node");
+		}
+		else
+		{
+			_restingVisualPosition = _visuals.Position;
+		}
 
 		_timeWithoutTarget = 0f;
 	}
@@ -85,11 +104,40 @@ public partial class PlayerVisualController : Node
 		float deltaFloat = (float)delta;
 		UpdateEyeVisuals(deltaFloat);
 		UpdateDeformVisuals(deltaFloat);
+		UpdateVisualLag(deltaFloat);
+	}
+
+	private void UpdateVisualLag(float delta)
+	{
+		if (_visuals == null || _playerController == null)
+			return;
+		
+		Vector2 velocity = _playerController.Velocity;
+		Vector2 targetPosition = _restingVisualPosition;
+
+		if (!velocity.IsZeroApprox())
+		{
+			Vector2 movementDirection = velocity.Normalized();
+
+			float speedRatio = Mathf.Clamp(
+				velocity.Length() / Mathf.Max(_playerController.MoveSpeed, 0.001f),
+				0f,
+				1f
+			);
+
+			Vector2 lagOffset = -movementDirection * MaxVisualLag * speedRatio;
+
+			targetPosition = _restingVisualPosition + lagOffset;
+		}
+
+		float weight = 1f - Mathf.Exp(-VisualLagResponsiveness * delta);
+
+		_visuals.Position = _visuals.Position.Lerp(targetPosition, weight);
 	}
 
 	private void UpdateDeformVisuals(float delta)
 	{
-		if (VisualDeformTransform == null || _playerController == null || _visuals == null)
+		if (VisualDeformTransform == null || _playerController == null || _body == null)
 			return;
 		
 		Vector2 targetScale = _restingVisualScale;
@@ -108,7 +156,7 @@ public partial class PlayerVisualController : Node
 			);
 		}
 
-		_visuals.Rotation = _restingVisualRotation - (VisualDeformTransform.Rotation - _restingDeformRotation);
+		_body.Rotation = _restingVisualRotation - (VisualDeformTransform.Rotation - _restingDeformRotation);
 
 		float scaleWeight = 1f - Mathf.Exp(-DeformResponsiveness * delta);
 
