@@ -40,10 +40,7 @@ script = ExtResource("3_825xp")
 script = ExtResource("4_0kmp4")
 Eyes = NodePath("../Visuals/Eyes")
 VisualDeformTransform = NodePath("../Visuals/VisualDeformTransform")
-StretchAmount = 0.03
-SquashAmount = 0.08
 DeformResponsiveness = 6.0
-DeformRotationResponsiveness = 4.0
 
 [node name="Visuals" type="Node2D" parent="." unique_id=326099303]
 script = ExtResource("2_h54ih")
