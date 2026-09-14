@@ -24,7 +24,7 @@ public partial class PlayerVisualController : Node
 	[Export] public float VisualLagResponsiveness { get; set; } = 10f; // How quickly the player's sprite move toward the target lag position.
 
 	[ExportGroup("Particles")]
-	[Export] public Node2D MovementParticlesPivot { get; set; }
+	[Export] public Node2D MovementParticlesPivot { get; set; } // The node contaning the player's movement particles, this is rotated to ensure the particles are always pointing back.
 
 	private GlowVisual _glowVisual; // The player's attached glow visual script.
 	private BasicGun _basicGun; // The players eyes look towards the current target of BasicGun.
@@ -131,7 +131,7 @@ public partial class PlayerVisualController : Node
 		UpdateMovementParticles();
 	}
 
-	// This runs every frame and makes sure that the player's movement particles are always facing behind the players, and only emmit particles when the player is moving.
+	// This runs every frame and makes sure that the player's movement particles are always facing behind the player, and only emit particles when the player is moving.
 	private void UpdateMovementParticles()
 	{
 		if (MovementParticlesPivot == null || _movementParticles == null || _playerController == null)
@@ -151,7 +151,7 @@ public partial class PlayerVisualController : Node
 		_movementParticles.Emitting = true;
 	}
 
-	// This runs every frame and causes the player's visual to trail behind the player's actual position.
+	// This runs every frame and causes the player's visuals to trail behind the player's actual position.
 	// This gives the impression of inertia without actually affecting the player's responsiveness when weaving through a crowd.
 	// This has the added effect of making the player's visual deformation look like it's only stretching away from the direction of movement.
 	private void UpdateVisualLag(float delta)
@@ -214,7 +214,7 @@ public partial class PlayerVisualController : Node
 	}
 
 	// This runs every frame and causes the player's eyes to look toward the target the player's currently shooting at.
-	// When an enemy dies they will continue looking toward where the enemy was before it died, until they recieves a new target or they reset back to their default position.
+	// When the target dies they will continue looking toward where the target was before it died, until they recieves a new target or they reset back to their default position.
 	// When the eye's don't recieve a new target to look at for long enough, they reset back to their default position.
 	private void UpdateEyeVisuals(float delta)
 	{
