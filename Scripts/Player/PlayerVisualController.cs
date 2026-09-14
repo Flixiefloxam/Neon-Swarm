@@ -1,6 +1,5 @@
-using System;
-using System.Runtime;
 using Godot;
+using NeonSwarm.Visuals;
 using NeonSwarm.Weapons;
 
 namespace NeonSwarm.Player;
@@ -24,6 +23,10 @@ public partial class PlayerVisualController : Node
 	[Export] public float MaxVisualLag { get; set; } = 2.5f; // Maximum distance the player's sprite can trail behind the player's actual position.
 	[Export] public float VisualLagResponsiveness { get; set; } = 10f; // How quickly the player's sprite move toward the target lag position.
 
+	[ExportGroup("Particles")]
+	[Export] public Node2D MovementParticlesPivot { get; set; }
+
+	private GlowVisual _glowVisual; // The player's attached glow visual script.
 	private BasicGun _basicGun; // The players eyes look towards the current target of BasicGun.
 	private Vector2 _restingEyesPosition; // Where the eyes are in their resting position.
 	private float _timeWithoutTarget; // How longs it's been since the player's eyes had a valid target to look at.
@@ -35,6 +38,7 @@ public partial class PlayerVisualController : Node
 	private Node2D _body; // The node containing player visuals. Needs to be the child of VisualDeformTransform.
 	private Node2D _visuals; // The root node of all the player visuals
 	private Vector2 _restingVisualPosition; // The starting position of the _visuals node.
+	private GpuParticles2D _movementParticles; // The particle emmiter for the player's movement particles
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -55,7 +59,7 @@ public partial class PlayerVisualController : Node
 
 		if (VisualDeformTransform == null) 
 		{
-			GD.PushWarning($"{Name} does not have a visuals node assigned.");
+			GD.PushError($"{Name} does not have a visuals node assigned.");
 		}
 		else
 		{
@@ -75,10 +79,7 @@ public partial class PlayerVisualController : Node
 
 		if (Eyes == null)
 		{
-			GD.PushError(
-				$"{Name} does not have an eyes node assigned."
-			);
-			return;
+			GD.PushError($"{Name} does not have an eyes node assigned.");
 		}
 		else
 		{
@@ -88,11 +89,33 @@ public partial class PlayerVisualController : Node
 		_visuals = GetNodeOrNull<Node2D>("../Visuals");
 		if (_visuals == null)
 		{
-			GD.PushError($"{Name} could not find Visuals node");
+			GD.PushError($"{Name} could not find Visuals node.");
 		}
 		else
 		{
 			_restingVisualPosition = _visuals.Position;
+			_glowVisual = _visuals as GlowVisual;
+			if (_glowVisual == null)
+			{
+				GD.PushWarning($"{Name} did not find an attached GlowVisual script on {_visuals.Name} node. Player particles may be the wrong colour.");
+			}
+		}
+
+		if (MovementParticlesPivot == null)
+		{
+			GD.PushError($"{Name} does not have a movement particle pivot assigned.");
+		}
+		else
+		{
+			_movementParticles = MovementParticlesPivot.GetNodeOrNull<GpuParticles2D>("Particles");
+			if (_movementParticles == null)
+			{
+				GD.PushError($"{Name} could not find movement particles emitter.");
+			}
+			else if (_glowVisual != null)
+			{
+				_movementParticles.SelfModulate = _glowVisual.BodyColor;
+			}
 		}
 
 		_timeWithoutTarget = 0f;
@@ -105,6 +128,27 @@ public partial class PlayerVisualController : Node
 		UpdateEyeVisuals(deltaFloat);
 		UpdateDeformVisuals(deltaFloat);
 		UpdateVisualLag(deltaFloat);
+		UpdateMovementParticles();
+	}
+
+	// This runs every frame and makes sure that the player's movement particles are always facing behind the players, and only emmit particles when the player is moving.
+	private void UpdateMovementParticles()
+	{
+		if (MovementParticlesPivot == null || _movementParticles == null || _playerController == null)
+		{
+			return;
+		}
+
+		Vector2 velocity = _playerController.Velocity;
+
+		if (velocity.IsZeroApprox())
+		{
+			_movementParticles.Emitting = false;
+			return;
+		}
+
+		MovementParticlesPivot.Rotation = velocity.Angle();
+		_movementParticles.Emitting = true;
 	}
 
 	// This runs every frame and causes the player's visual to trail behind the player's actual position.

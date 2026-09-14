@@ -14,6 +14,27 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ft8w5"]
 
+[sub_resource type="Gradient" id="Gradient_0kmp4"]
+offsets = PackedFloat32Array(0, 0.4, 1)
+colors = PackedColorArray(1, 1, 1, 0.8, 1, 1, 1, 0.5, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0kmp4"]
+gradient = SubResource("Gradient_0kmp4")
+use_hdr = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0kmp4"]
+particle_flag_disable_z = true
+direction = Vector3(-1, 0, 0)
+spread = 120.0
+initial_velocity_min = 20.0
+initial_velocity_max = 45.0
+gravity = Vector3(0, 0, 0)
+damping_min = 50.000004
+damping_max = 90.00001
+scale_min = 0.5
+scale_max = 1.1999999
+color_ramp = SubResource("GradientTexture1D_0kmp4")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t26db"]
 
 [node name="Player" type="CharacterBody2D" unique_id=168775628 groups=["Player"]]
@@ -36,16 +57,29 @@ HitFlashDuration = 0.24
 [node name="ExperienceComponent" type="Node" parent="." unique_id=1656525418]
 script = ExtResource("3_825xp")
 
-[node name="PlayerVisualController" type="Node" parent="." unique_id=1169464149 node_paths=PackedStringArray("Eyes", "VisualDeformTransform")]
+[node name="PlayerVisualController" type="Node" parent="." unique_id=1169464149 node_paths=PackedStringArray("Eyes", "VisualDeformTransform", "MovementParticlesPivot")]
 script = ExtResource("4_0kmp4")
 Eyes = NodePath("../Visuals/Eyes")
 VisualDeformTransform = NodePath("../Visuals/VisualDeformTransform")
 DeformResponsiveness = 6.0
+MovementParticlesPivot = NodePath("../Visuals/MovementParticlesPivot")
 
 [node name="Visuals" type="Node2D" parent="." unique_id=326099303]
 script = ExtResource("2_h54ih")
 BodyColor = Color(0, 0.39297795, 1, 1)
 GlowIntensity = 1.4
+
+[node name="MovementParticlesPivot" type="Node2D" parent="Visuals" unique_id=17695807]
+position = Vector2(-7, 0)
+
+[node name="Particles" type="GPUParticles2D" parent="Visuals/MovementParticlesPivot" unique_id=508060955]
+self_modulate = Color(0, 0.6313726, 1, 1)
+emitting = false
+amount = 4
+texture = ExtResource("8_0kmp4")
+lifetime = 0.28
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_0kmp4")
 
 [node name="VisualDeformTransform" type="Node2D" parent="Visuals" unique_id=1736591243]
 
