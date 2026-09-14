@@ -13,7 +13,7 @@ public partial class GlowVisual : Node2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        _body = GetNodeOrNull<Sprite2D>("Body");
+        _body = FindChild("Body", recursive: true, owned: false) as Sprite2D;
         UpdateVisuals();
     }
 
