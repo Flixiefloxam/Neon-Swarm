@@ -37,6 +37,43 @@ color_ramp = SubResource("GradientTexture1D_0kmp4")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t26db"]
 
+[sub_resource type="Animation" id="Animation_i5acl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Eyes:scale:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_0kmp4"]
+resource_name = "blink"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Eyes:scale:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.08, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.05, 0.05, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_epg6k"]
+_data = {
+&"RESET": SubResource("Animation_i5acl"),
+&"blink": SubResource("Animation_0kmp4")
+}
+
 [node name="Player" type="CharacterBody2D" unique_id=168775628 groups=["Player"]]
 z_index = 2
 scale = Vector2(1.3, 1.3)
@@ -57,9 +94,10 @@ HitFlashDuration = 0.24
 [node name="ExperienceComponent" type="Node" parent="." unique_id=1656525418]
 script = ExtResource("3_825xp")
 
-[node name="PlayerVisualController" type="Node" parent="." unique_id=1169464149 node_paths=PackedStringArray("Eyes", "VisualDeformTransform", "MovementParticlesPivot")]
+[node name="PlayerVisualController" type="Node" parent="." unique_id=1169464149 node_paths=PackedStringArray("Eyes", "AnimationPlayer", "VisualDeformTransform", "MovementParticlesPivot")]
 script = ExtResource("4_0kmp4")
 Eyes = NodePath("../Visuals/Eyes")
+AnimationPlayer = NodePath("../AnimationPlayer")
 VisualDeformTransform = NodePath("../Visuals/VisualDeformTransform")
 DeformResponsiveness = 6.0
 MovementParticlesPivot = NodePath("../Visuals/MovementParticlesPivot")
@@ -124,3 +162,6 @@ BaseStats = ExtResource("7_fk5o5")
 
 [node name="HealthBar" type="Node2D" parent="." unique_id=1592291339]
 script = ExtResource("9_825xp")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1314398394]
+libraries/ = SubResource("AnimationLibrary_epg6k")

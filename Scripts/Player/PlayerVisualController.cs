@@ -8,10 +8,13 @@ public partial class PlayerVisualController : Node
 {
 	[ExportGroup("Eyes")]
 	[Export] public Node2D Eyes { get; set; } // The parent node that holds both eyes. This node will get moved towards the enemy being shot at.
+	[Export] public AnimationPlayer AnimationPlayer { get; set; } // The animation player with the "blink" animation
 
 	[Export] public float MaxEyeOffset { get; set; } = 2f; // How far from their neutral position the eyes can move when looking at something.
 	[Export] public float EyeMoveSpeed { get; set; } = 12f; // How fast the eyes will move towards a new position when looking.
 	[Export] public float ReturnDelay { get; set; } = 1f; // How long the eyes need to be without a target.
+	[Export] public float MinBlinkInterval { get; set; } = 2.5f;
+	[Export] public float MaxBlinkInterval { get; set; } = 6f;
 
 	[ExportGroup("Movement")]
 	[Export] public Node2D VisualDeformTransform { get; set; } // The node that's deformed for player visual deformation.
@@ -39,6 +42,8 @@ public partial class PlayerVisualController : Node
 	private Node2D _visuals; // The root node of all the player visuals
 	private Vector2 _restingVisualPosition; // The starting position of the _visuals node.
 	private GpuParticles2D _movementParticles; // The particle emmiter for the player's movement particles
+	private float _timeUntilBlink; // Countdown until the next blink. When it hit's zero, the blink animation is triggered.
+	private readonly RandomNumberGenerator _random = new();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -119,16 +124,36 @@ public partial class PlayerVisualController : Node
 		}
 
 		_timeWithoutTarget = 0f;
+		_random.Randomize();
+		ScheduleNextBlink();
+
+		AnimationPlayer.AnimationFinished += OnAnimationFinished;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		float deltaFloat = (float)delta;
+
 		UpdateEyeVisuals(deltaFloat);
 		UpdateDeformVisuals(deltaFloat);
 		UpdateVisualLag(deltaFloat);
 		UpdateMovementParticles();
+		UpdateBlinking(deltaFloat);
+	}
+
+	// This runs every frame and decriments _timeUntilBlink. When it hits zero, it triggers the blink animation.
+	private void UpdateBlinking(float delta)
+	{
+		if (AnimationPlayer == null || AnimationPlayer.IsPlaying())
+		{
+			return;
+		}
+
+		_timeUntilBlink -= delta;
+
+		if (_timeUntilBlink <= 0f)
+			AnimationPlayer.Play("blink");
 	}
 
 	// This runs every frame and makes sure that the player's movement particles are always facing behind the player, and only emit particles when the player is moving.
@@ -253,4 +278,21 @@ public partial class PlayerVisualController : Node
 		
 		return false;
 	}
+
+	private void ScheduleNextBlink()
+	{
+		_timeUntilBlink = _random.RandfRange(MinBlinkInterval, MaxBlinkInterval);
+	}
+
+	private void OnAnimationFinished(StringName animationName)
+	{
+		if (animationName == "blink")
+			ScheduleNextBlink();
+	}
+
+    public override void _ExitTree()
+    {
+        if (AnimationPlayer != null)
+			AnimationPlayer.AnimationFinished -= OnAnimationFinished;
+    }
 }
