@@ -80,6 +80,13 @@ public partial class WeaponStatUpgradeEffect : BaseUpgradeEffect
                 {
                     GD.PushWarning("Upgrading HitsUntilDestroyed with a non AddFlat operation type. Resulting value will be rounded and may result in odd stacking behaviour.");
                 }
+                if (runtimeStats.HitsUntilDestroyed == 0)
+                {
+                    // If HitsUntilDestroyed is 0 it gives infinite penetration, and therefore any change would not be an upgrade.
+                    GD.PushWarning("HitsUntilDestroyed is 0 and cannot be further upgraded.");
+                    return;
+                }
+
                 runtimeStats.HitsUntilDestroyed = Mathf.RoundToInt(Mathf.Max(1f, ApplyOperation(runtimeStats.HitsUntilDestroyed, baseStats.HitsUntilDestroyed)));
                 break;
             
