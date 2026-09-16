@@ -8,5 +8,6 @@ public enum WeaponStatType
 	ProjectileLifetime,
 	DamageCooldown,
 	KnockbackStrength,
-	ProjectileSpawnOffset
+	ProjectileSpawnOffset,
+	HitsUntilDestroyed
 }

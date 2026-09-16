@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3 uid="uid://b47wpoj4r2a60"]
+
+[ext_resource type="Script" uid="uid://cw42uljt8bagv" path="res://Scripts/Upgrades/BaseUpgradeEffect.cs" id="1_1kj4t"]
+[ext_resource type="Script" uid="uid://dyqpp0o5wymko" path="res://Scripts/Upgrades/Effects/WeaponStatUpgradeEffect.cs" id="2_civ8w"]
+[ext_resource type="Script" uid="uid://dqrf1smqbfdrm" path="res://Scripts/Upgrades/UpgradeDefinition.cs" id="3_4a70d"]
+
+[sub_resource type="Resource" id="Resource_etb7j"]
+script = ExtResource("2_civ8w")
+Stat = 7
+metadata/_custom_type_script = "uid://dyqpp0o5wymko"
+
+[resource]
+script = ExtResource("3_4a70d")
+UpgradeId = "basic_gun_penetration"
+DisplayName = "Penetrating Rounds"
+Description = "Pistol enemy penetration +1"
+Rarity = 1
+MaxStacks = 5
+Effects = Array[ExtResource("1_1kj4t")]([SubResource("Resource_etb7j")])
+metadata/_custom_type_script = "uid://dqrf1smqbfdrm"

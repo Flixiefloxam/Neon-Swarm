@@ -75,6 +75,14 @@ public partial class WeaponStatUpgradeEffect : BaseUpgradeEffect
 				runtimeStats.ProjectileSpawnOffset = Mathf.Max(0f, ApplyOperation(runtimeStats.ProjectileSpawnOffset, baseStats.ProjectileSpawnOffset));
 				break;
             
+            case WeaponStatType.HitsUntilDestroyed:
+                if (Operation != UpgradeOperation.AddFlat)
+                {
+                    GD.PushWarning("Upgrading HitsUntilDestroyed with a non AddFlat operation type. Resulting value will be rounded and may result in odd stacking behaviour.");
+                }
+                runtimeStats.HitsUntilDestroyed = Mathf.RoundToInt(Mathf.Max(1f, ApplyOperation(runtimeStats.HitsUntilDestroyed, baseStats.HitsUntilDestroyed)));
+                break;
+            
             default:
                 GD.PushWarning($"Unhandled weapon stat type: {Stat}");
 				break;
