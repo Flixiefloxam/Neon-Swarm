@@ -15,6 +15,6 @@ UpgradeId = "basic_gun_penetration"
 DisplayName = "Penetrating Rounds"
 Description = "Pistol enemy penetration +1"
 Rarity = 1
-MaxStacks = 5
+MaxStacks = 2
 Effects = Array[ExtResource("1_1kj4t")]([SubResource("Resource_etb7j")])
 metadata/_custom_type_script = "uid://dqrf1smqbfdrm"
